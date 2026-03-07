@@ -13,6 +13,7 @@ end
 
 -- ── State ────────────────────────────────────────────────────
 local menuOpen    = false
+local wheelOpen   = false
 local currentDict = nil
 local currentAnim = nil
 
@@ -128,6 +129,29 @@ for idx, bind in ipairs(Config.DirectKeybinds) do
     end, false)
 end
 
+-- ── Animations-Rad (Wheel) ────────────────────────────────────
+-- Halten = Rad offen  |  Loslassen = Rad schließen (wie GTA Waffenrad)
+-- Taste in FiveM-Einstellungen → Tastenbelegung → AnimationMTJ2024 bindbar
+RegisterKeyMapping('+animWheel', 'AnimationMTJ2024 – Animations-Rad (halten)', 'keyboard', Config.WheelKey)
+RegisterCommand('+animWheel', function()
+    if menuOpen or wheelOpen then return end
+    wheelOpen = true
+    SetNuiFocus(true, true)
+    SendNUIMessage({
+        action      = 'openWheel',
+        categories  = Config.Animations,
+        quickbar    = quickbarAnims,
+        currentDict = currentDict,
+        currentAnim = currentAnim,
+    })
+end, false)
+
+RegisterCommand('-animWheel', function()
+    if not wheelOpen then return end
+    wheelOpen = false
+    SetNuiFocus(false, false)
+    SendNUIMessage({ action = 'closeWheel' })
+end, false)
 
 RegisterNUICallback('playAnim', function(data, cb)
     PlayAnimation(data.dict, data.anim, data.flag)
@@ -139,9 +163,20 @@ RegisterNUICallback('stopAnim', function(data, cb)
     cb({ success = true })
 end)
 
+-- ── Helper: NUI-Fokus freigeben ─────────────────────────────
+local function ReleaseNuiFocus()
+    SetNuiFocus(false, false)
+end
+
 RegisterNUICallback('closeMenu', function(data, cb)
     menuOpen = false
-    SetNuiFocus(false, false)
+    ReleaseNuiFocus()
+    cb({ success = true })
+end)
+
+RegisterNUICallback('closeWheel', function(data, cb)
+    wheelOpen = false
+    ReleaseNuiFocus()
     cb({ success = true })
 end)
 

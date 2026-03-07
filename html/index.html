@@ -122,6 +122,56 @@
     <!-- Kontextmenü (rechtsklick auf Karte) -->
     <div id="context-menu"></div>
 
+    <!-- ══════════════════════════════════════════════ -->
+    <!--   ANIMATIONS-RAD (Wheel)                       -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div id="wheel-overlay" class="hidden">
+
+        <div id="wheel-wrap">
+
+            <!-- SVG-Rad -->
+            <div id="wheel-container">
+                <svg id="wheel-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"></svg>
+                <div id="wheel-center">
+                    <div id="wheel-center-icon">🎭</div>
+                    <div id="wheel-center-name">Wähle<br>Kategorie</div>
+                </div>
+            </div>
+
+            <!-- Animations-Panel (erscheint beim Hover über Segment) -->
+            <div id="wheel-panel" class="wheel-panel-hidden">
+                <div id="wheel-panel-header">
+                    <span id="wheel-panel-icon">🎭</span>
+                    <div>
+                        <div id="wheel-panel-title">Kategorie</div>
+                        <div id="wheel-panel-count">— Animationen</div>
+                    </div>
+                </div>
+                <div id="wheel-panel-list"></div>
+                <div id="wheel-panel-empty">
+                    <span>🖱️</span>
+                    <span>Fahre über eine Kategorie</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Quickbar-Slots im Wheel (zeigt aktuelle Belegung) -->
+        <div id="wheel-quickbar">
+            <span class="wqb-label">SCHNELLZUGRIFF</span>
+            <div id="wheel-qb-slots"></div>
+            <span class="wqb-label">NUM 1–5 &nbsp;·&nbsp; ⚙️ Tasten in FiveM-Einstellungen</span>
+        </div>
+
+        <!-- Hint-Leiste -->
+        <div id="wheel-hint">
+            <kbd>ESC</kbd> oder Taste loslassen zum Schließen
+            &nbsp;·&nbsp;
+            <span class="wh-accent">⌨️ Rad-Taste: FiveM-Einstellungen → AnimationMTJ2024</span>
+        </div>
+
+    </div><!-- /wheel-overlay -->
+
     <script src="app.js"></script>
 </body>
 </html>

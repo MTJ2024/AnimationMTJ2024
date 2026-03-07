@@ -9,8 +9,12 @@ Config = {}
 -- Erwartet ressourcenname (für Kopierschutz)
 Config.ResourceName = 'AnimationMTJ2024'
 
--- Taste zum Öffnen / Schließen des Menüs
+-- Taste zum Öffnen / Schließen des Menüs (konfigurierbar in FiveM-Einstellungen)
 Config.OpenKey = 'F5'
+
+-- Taste zum Öffnen des Animations-Rads (Rad-Modus, halten = offen)
+-- Kein Standard – in FiveM-Einstellungen → Tastenbelegung → AnimationMTJ2024 setzen
+Config.WheelKey = ''
 
 -- Menü automatisch schließen wenn der Spieler läuft (true/false)
 Config.CloseOnWalk = false

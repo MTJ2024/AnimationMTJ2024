@@ -597,7 +597,6 @@ kbd {
 .footer-keyhint {
     display: flex;
     align-items: center;
-    gap: 0;
     white-space: nowrap;
 }
 
@@ -664,3 +663,377 @@ kbd {
     background: rgba(139,92,246,.18);
     color: var(--c-accent-1);
 }
+
+/* ════════════════════════════════════════════════════════════
+   DESIGN ENHANCEMENTS
+   ════════════════════════════════════════════════════════════ */
+
+/* Subtle gradient orbs in menu overlay */
+#overlay {
+    background:
+        radial-gradient(circle at 22% 30%, rgba(139,92,246,.09) 0%, transparent 42%),
+        radial-gradient(circle at 78% 70%, rgba(6,182,212,.07) 0%, transparent 42%),
+        rgba(0,0,0,.73);
+}
+
+/* Enhanced quickbar bar */
+.quickbar-inner {
+    background: linear-gradient(135deg, rgba(14,8,32,.97) 0%, rgba(8,8,22,.97) 100%);
+    box-shadow:
+        0 -4px 28px rgba(139,92,246,.12),
+        0 8px 32px rgba(0,0,0,.7),
+        0 0 0 1px rgba(139,92,246,.20);
+    position: relative;
+    overflow: hidden;
+}
+.quickbar-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--grad-main);
+    opacity: .5;
+}
+
+/* Richer card hover */
+.anim-card:hover {
+    box-shadow: var(--shadow-card), 0 0 0 1px rgba(139,92,246,.4),
+        inset 0 1px 0 rgba(255,255,255,.05);
+}
+.anim-card.playing {
+    box-shadow: var(--glow-acc), 0 0 0 1px rgba(139,92,246,.55),
+        inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* Sidebar category count accent */
+.cat-count {
+    background: rgba(139,92,246,.10);
+    color: rgba(139,92,246,.85);
+    border: 1px solid rgba(139,92,246,.18);
+}
+.cat-item.active .cat-count {
+    background: rgba(139,92,246,.22);
+    color: var(--c-accent-1);
+    border-color: rgba(139,92,246,.4);
+}
+
+/* ════════════════════════════════════════════════════════════
+   ANIMATIONS-RAD (Wheel)
+   ════════════════════════════════════════════════════════════ */
+
+#wheel-overlay {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 30% 40%, rgba(139,92,246,.12) 0%, transparent 45%),
+        radial-gradient(circle at 70% 60%, rgba(6,182,212,.10) 0%, transparent 45%),
+        rgba(0,0,0,.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1100;
+    animation: fadeIn .18s ease;
+}
+
+#wheel-wrap {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    animation: menuIn .36s cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ── SVG container ──────────────────────────────── */
+#wheel-container {
+    position: relative;
+    width: 480px;
+    height: 480px;
+    flex-shrink: 0;
+}
+
+#wheel-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 0 28px rgba(139,92,246,.20));
+}
+
+/* ── Center circle ──────────────────────────────── */
+#wheel-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 148px;
+    height: 148px;
+    background: radial-gradient(circle at 38% 32%, rgba(28,12,56,.99) 0%, rgba(8,8,22,.99) 100%);
+    border: 2px solid rgba(139,92,246,.55);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-shadow:
+        0 0 0 5px rgba(139,92,246,.07),
+        0 0 52px rgba(139,92,246,.32),
+        inset 0 2px 0 rgba(255,255,255,.07);
+    pointer-events: none;
+    z-index: 10;
+    transition: border-color .25s, box-shadow .25s;
+}
+#wheel-center.has-sel {
+    border-color: rgba(6,182,212,.75);
+    box-shadow:
+        0 0 0 5px rgba(6,182,212,.08),
+        0 0 60px rgba(6,182,212,.38),
+        inset 0 2px 0 rgba(255,255,255,.07);
+}
+#wheel-center-icon {
+    font-size: 40px;
+    filter: drop-shadow(0 0 10px var(--c-accent-1));
+    transition: filter .25s;
+    line-height: 1;
+}
+#wheel-center.has-sel #wheel-center-icon { filter: drop-shadow(0 0 14px var(--c-accent-2)); }
+#wheel-center-name {
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--c-text-3);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1.55;
+    padding: 0 10px;
+    transition: color .2s;
+}
+
+/* ── Wheel Panel (animation list) ──────────────── */
+#wheel-panel {
+    width: 300px;
+    max-height: 480px;
+    background: rgba(8,8,22,.98);
+    border: 1px solid rgba(139,92,246,.38);
+    border-radius: var(--r-xl);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow:
+        0 24px 64px rgba(0,0,0,.82),
+        0 0 0 1px rgba(139,92,246,.06),
+        inset 0 1px 0 rgba(255,255,255,.04);
+    transition: opacity .2s, transform .2s;
+}
+.wheel-panel-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateX(-14px) !important;
+}
+#wheel-panel:not(.wheel-panel-hidden) {
+    animation: slideInRight .22s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes slideInRight {
+    from { transform: translateX(-18px); opacity: 0; }
+    to   { transform: translateX(0);     opacity: 1; }
+}
+#wheel-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(139,92,246,.13) 0%, rgba(6,182,212,.06) 100%);
+    flex-shrink: 0;
+    position: relative;
+}
+#wheel-panel-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--grad-main);
+    opacity: .35;
+}
+#wheel-panel-icon { font-size: 28px; flex-shrink: 0; }
+#wheel-panel-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--c-text-1);
+    letter-spacing: -.3px;
+    transition: color .2s;
+}
+#wheel-panel-count {
+    font-size: 11px;
+    color: var(--c-text-3);
+    margin-top: 2px;
+}
+#wheel-panel-list {
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+#wheel-panel-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 40px 20px;
+    color: var(--c-text-3);
+    font-size: 12px;
+    text-align: center;
+}
+#wheel-panel-empty span:first-child { font-size: 36px; }
+
+.wheel-anim-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--c-text-2);
+    transition: all .15s;
+    border: 1px solid transparent;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+.wheel-anim-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grad-card);
+    opacity: 0;
+    transition: opacity .15s;
+}
+.wheel-anim-item:hover {
+    border-color: rgba(139,92,246,.30);
+    color: var(--c-text-1);
+    transform: translateX(3px);
+}
+.wheel-anim-item:hover::before { opacity: 1; }
+.wheel-anim-item.playing { border-color: var(--c-accent-1); color: var(--c-text-1); }
+.wheel-anim-item.playing::before { opacity: 1; }
+.wheel-anim-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    width: 22px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+.wheel-anim-label { flex: 1; position: relative; z-index: 1; }
+.wheel-anim-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--c-accent-2);
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+    display: none;
+    animation: pulse 1.4s ease-in-out infinite;
+}
+.wheel-anim-item.playing .wheel-anim-dot { display: block; }
+
+/* ── Quickbar strip im Wheel ────────────────────── */
+#wheel-quickbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 22px;
+    background: rgba(8,8,22,.88);
+    border: 1px solid rgba(139,92,246,.22);
+    border-radius: var(--r-xl);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 24px rgba(0,0,0,.5);
+    animation: slideUp .35s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+    overflow: hidden;
+}
+#wheel-quickbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--grad-main);
+    opacity: .4;
+}
+.wqb-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--c-text-3);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+#wheel-qb-slots { display: flex; gap: 8px; }
+.wqb-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    width: 72px;
+    padding: 8px 6px 6px;
+    background: var(--c-bg-glass);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+}
+.wqb-slot::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--grad-main);
+    opacity: 0;
+    transition: opacity .2s;
+}
+.wqb-slot.active {
+    background: var(--grad-card);
+    border-color: var(--c-accent-1);
+    box-shadow: var(--glow-acc);
+}
+.wqb-slot.active::before { opacity: 1; }
+.wqb-key {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    color: var(--c-text-3);
+    text-transform: uppercase;
+}
+.wqb-icon { font-size: 18px; line-height: 1.1; }
+.wqb-name {
+    font-size: 9px;
+    color: var(--c-text-2);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    padding: 0 2px;
+}
+
+/* ── Wheel Hint bar ─────────────────────────────── */
+#wheel-hint {
+    font-size: 11px;
+    color: var(--c-text-3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 20px;
+    background: rgba(8,8,22,.8);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    backdrop-filter: blur(12px);
+    letter-spacing: .2px;
+}
+.wh-accent { color: var(--c-accent-1); font-weight: 700; }
