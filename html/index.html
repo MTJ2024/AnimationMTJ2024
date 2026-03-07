@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnimationMTJ2024</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--   SCHNELLZUGRIFF-LEISTE (immer sichtbar)       -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div id="quickbar" class="hidden">
+        <div class="quickbar-inner">
+            <div class="quickbar-brand">⚡</div>
+            <div class="quickbar-slots" id="quickbar-slots">
+                <div class="qslot" data-slot="0">
+                    <div class="qslot-key">NUM 1</div>
+                    <div class="qslot-icon">➕</div>
+                    <div class="qslot-name">Leer</div>
+                </div>
+                <div class="qslot" data-slot="1">
+                    <div class="qslot-key">NUM 2</div>
+                    <div class="qslot-icon">➕</div>
+                    <div class="qslot-name">Leer</div>
+                </div>
+                <div class="qslot" data-slot="2">
+                    <div class="qslot-key">NUM 3</div>
+                    <div class="qslot-icon">➕</div>
+                    <div class="qslot-name">Leer</div>
+                </div>
+                <div class="qslot" data-slot="3">
+                    <div class="qslot-key">NUM 4</div>
+                    <div class="qslot-icon">➕</div>
+                    <div class="qslot-name">Leer</div>
+                </div>
+                <div class="qslot" data-slot="4">
+                    <div class="qslot-key">NUM 5</div>
+                    <div class="qslot-icon">➕</div>
+                    <div class="qslot-name">Leer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!--   HAUPT-MENÜ OVERLAY                           -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div id="overlay" class="hidden">
+
+        <div id="menu">
+
+            <!-- Header -->
+            <header id="menu-header">
+                <div id="menu-logo">
+                    <span class="logo-icon">🎭</span>
+                    <span class="logo-text">
+                        Animation<span class="logo-accent">MTJ</span><span class="logo-year">2024</span>
+                    </span>
+                </div>
+                <div id="menu-meta">
+                    <span class="badge-version">v1.0.0</span>
+                    <span class="badge-copy">© 2024 MTJ2024</span>
+                    <button id="close-btn" aria-label="Schließen">✕</button>
+                </div>
+            </header>
+
+            <!-- Suchleiste -->
+            <div id="search-bar">
+                <div class="search-wrap">
+                    <span class="search-ico">🔍</span>
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Animation suchen …"
+                        autocomplete="off"
+                        spellcheck="false"
+                    />
+                    <button id="search-clear" aria-label="Leeren" style="display:none">✕</button>
+                </div>
+            </div>
+
+            <!-- Hauptbereich: Sidebar + Grid -->
+            <div id="menu-body">
+
+                <!-- Kategorie-Sidebar -->
+                <nav id="sidebar">
+                    <p class="sidebar-label">KATEGORIEN</p>
+                    <div id="category-list"></div>
+                    <div class="sidebar-footer">
+                        <button id="stop-btn">⏹ &nbsp;Animation stoppen</button>
+                    </div>
+                </nav>
+
+                <!-- Animations-Grid -->
+                <section id="anim-content">
+                    <h2 id="category-title">Alle Animationen</h2>
+                    <div id="anim-grid"></div>
+                    <div id="no-results" class="hidden">
+                        <div class="nr-icon">🔎</div>
+                        <p>Keine Animationen gefunden</p>
+                    </div>
+                </section>
+
+            </div><!-- /menu-body -->
+
+            <!-- Footer -->
+            <footer id="menu-footer">
+                <span>💡 Rechtsklick auf eine Animation → Schnellzugriff-Slot zuweisen</span>
+                <span>Schließen: <kbd>ESC</kbd> oder <kbd>F5</kbd></span>
+            </footer>
+
+        </div><!-- /menu -->
+
+    </div><!-- /overlay -->
+
+    <!-- Kontextmenü (rechtsklick auf Karte) -->
+    <div id="context-menu"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
