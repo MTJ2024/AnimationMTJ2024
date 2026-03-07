@@ -32,41 +32,38 @@ Config.Quickbar = {
 
 -- ============================================================
 --   DIREKTE TASTENBELEGUNGEN
---   Jede Animation kann eine eigene Taste bekommen.
---   key = ''  → kein Direktbind (nur über Menü / Quickbar erreichbar)
---   Alle Tasten sind in den FiveM-Einstellungen → Tastenbelegung
---   unter "AnimationMTJ2024" frei änderbar.
---
---   Gültige Key-Werte (Beispiele):
---     Buchstaben:  'J', 'K', 'L', 'U', 'I', 'O', 'P'
---     F-Tasten:    'F6', 'F7', 'F8', 'F9', 'F10', 'F11'
---     Numpad:      'NUMPAD0' … 'NUMPAD9', 'DECIMAL', 'ADD', 'SUBTRACT'
---     Sonstiges:   'PRIOR', 'NEXT', 'HOME', 'END', 'INSERT', 'DELETE'
---     '' = kein Standard-Bind (trotzdem über FiveM-Einstellungen setzbar)
+--   Alle Einträge erscheinen in den FiveM-Einstellungen unter
+--   Tastenbelegung → AnimationMTJ2024.
+--   Kein Eintrag hat eine voreingestellte Taste – der Spieler
+--   wählt selbst, welche Taste er verwenden möchte.
 -- ============================================================
 Config.DirectKeybinds = {
-    -- Populäre Schnell-Animationen mit voreingestellten Tasten
-    { key = 'J',       label = 'Winken',         dict = 'mp_player_int_upperbody_idles@v2',            anim = 'idle_a',  flag = 49 },
-    { key = 'K',       label = 'Daumen hoch',    dict = 'mp_player_int_upperbody_idles@v2',            anim = 'idle_c',  flag = 49 },
-    { key = 'L',       label = 'Daumen runter',  dict = 'mp_player_int_upperbody_idles@v2',            anim = 'idle_d',  flag = 49 },
-    { key = 'U',       label = 'Jubeln',         dict = 'mp_player_int_upperbody_idles@v2',            anim = 'idle_j',  flag = 49 },
-    { key = 'F6',      label = 'Club Dance 1',   dict = 'anim@amb@nightclub@dancers@club_idles',       anim = 'club_idle_1', flag = 1 },
-    { key = 'F7',      label = 'Rauchen',        dict = 'amb@world_human_smoking@male@idle_a',         anim = 'idle_a',  flag = 1 },
-    { key = 'F8',      label = 'Sonnenbaden',    dict = 'amb@world_human_sunbathe@male@base',          anim = 'base',    flag = 1 },
-    { key = 'F9',      label = 'Yoga',           dict = 'amb@world_human_yoga@female@base',            anim = 'base',    flag = 1 },
-    { key = 'F10',     label = 'Liegestütze',    dict = 'amb@world_human_push_ups@male@base',          anim = 'base',    flag = 1 },
-    { key = 'F11',     label = 'Gitarre',        dict = 'amb@world_human_musician_guitar@male@base',   anim = 'base',    flag = 1 },
-    -- Weitere Tasten ohne Vorbelegung (in FiveM-Einstellungen setzbar)
-    { key = '',        label = 'Zeigen',         dict = 'mp_player_int_upperbody_idles@v2',            anim = 'idle_b',  flag = 49 },
-    { key = '',        label = 'Klatschen',      dict = 'mp_player_int_upperbody_idles@v2',            anim = 'idle_e',  flag = 49 },
-    { key = '',        label = 'Slow Dance',     dict = 'anim@amb@nightclub_main@male@dncing@slow_a',  anim = 'idle_a',  flag = 1 },
-    { key = '',        label = 'Chill Stehen',   dict = 'amb@world_human_hang_out_street@male_a@idle_a', anim = 'idle_a', flag = 1 },
-    { key = '',        label = 'Beten',          dict = 'amb@world_human_cheering@male_a@base',        anim = 'base',    flag = 1 },
-    { key = '',        label = 'Polizei Idle',   dict = 'amb@world_human_cop_idles@male@idle_01',      anim = 'idle_01', flag = 1 },
-    { key = '',        label = 'Gitarre (Violine)', dict = 'amb@world_human_musician_violin@male@base', anim = 'base',   flag = 1 },
-    { key = '',        label = 'Golf',           dict = 'amb@world_human_golf_player@male@base',       anim = 'base',    flag = 1 },
-    { key = '',        label = 'Trinken (Flasche)', dict = 'amb@world_human_vodka_bottle@male@idle_a', anim = 'idle_a',  flag = 1 },
-    { key = '',        label = 'Fotografieren',  dict = 'amb@world_human_paparazzi@male@base',         anim = 'base',    flag = 1 },
+    { key = '', label = 'Winken',              dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_a',      flag = 49 },
+    { key = '', label = 'Daumen hoch',         dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_c',      flag = 49 },
+    { key = '', label = 'Daumen runter',       dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_d',      flag = 49 },
+    { key = '', label = 'Jubeln',              dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_j',      flag = 49 },
+    { key = '', label = 'Klatschen',           dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_e',      flag = 49 },
+    { key = '', label = 'Zeigen',              dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_b',      flag = 49 },
+    { key = '', label = 'Lachen',              dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_i',      flag = 49 },
+    { key = '', label = 'Kopf schütteln',      dict = 'mp_player_int_upperbody_idles@v2',             anim = 'idle_f',      flag = 49 },
+    { key = '', label = 'Club Dance 1',        dict = 'anim@amb@nightclub@dancers@club_idles',        anim = 'club_idle_1', flag = 1  },
+    { key = '', label = 'Club Dance 2',        dict = 'anim@amb@nightclub@dancers@club_idles',        anim = 'club_idle_2', flag = 1  },
+    { key = '', label = 'Slow Dance',          dict = 'anim@amb@nightclub_main@male@dncing@slow_a',   anim = 'idle_a',      flag = 1  },
+    { key = '', label = 'Rauchen',             dict = 'amb@world_human_smoking@male@idle_a',          anim = 'idle_a',      flag = 1  },
+    { key = '', label = 'Trinken',             dict = 'amb@world_human_drinking@male@idle_a',         anim = 'idle_a',      flag = 1  },
+    { key = '', label = 'Sonnenbaden',         dict = 'amb@world_human_sunbathe@male@base',           anim = 'base',        flag = 1  },
+    { key = '', label = 'Yoga',                dict = 'amb@world_human_yoga@female@base',             anim = 'base',        flag = 1  },
+    { key = '', label = 'Liegestütze',         dict = 'amb@world_human_push_ups@male@base',           anim = 'base',        flag = 1  },
+    { key = '', label = 'Gitarre',             dict = 'amb@world_human_musician_guitar@male@base',    anim = 'base',        flag = 1  },
+    { key = '', label = 'Chill Stehen',        dict = 'amb@world_human_hang_out_street@male_a@idle_a',anim = 'idle_a',      flag = 1  },
+    { key = '', label = 'Beten',               dict = 'amb@world_human_cheering@male_a@base',         anim = 'base',        flag = 1  },
+    { key = '', label = 'Polizei Idle',        dict = 'amb@world_human_cop_idles@male@idle_01',       anim = 'idle_01',     flag = 1  },
+    { key = '', label = 'Golf',                dict = 'amb@world_human_golf_player@male@base',        anim = 'base',        flag = 1  },
+    { key = '', label = 'Fotografieren',       dict = 'amb@world_human_paparazzi@male@base',          anim = 'base',        flag = 1  },
+    { key = '', label = 'Klemmbrett',          dict = 'amb@world_human_clipboard@male@base',          anim = 'base',        flag = 1  },
+    { key = '', label = 'Schweißen',           dict = 'amb@world_human_welding@male@base',            anim = 'base',        flag = 1  },
+    { key = '', label = 'Flex (Pose)',         dict = 'amb@world_human_flex@male_a@base',             anim = 'base',        flag = 1  },
+    { key = '', label = 'Sit-Ups',             dict = 'amb@world_human_sit_ups@male@base',            anim = 'base',        flag = 1  },
 }
 
 -- ============================================================

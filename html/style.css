@@ -594,6 +594,21 @@ kbd {
     color: var(--c-text-2);
 }
 
+.footer-keyhint {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    white-space: nowrap;
+}
+
+.footer-rebind-hint {
+    cursor: help;
+    color: var(--c-accent-1);
+    font-weight: 600;
+    transition: color .15s;
+}
+.footer-rebind-hint:hover { color: var(--c-accent-2); }
+
 /* ════════════════════════════════════════════════════════════
    KONTEXT-MENÜ (Rechtsklick)
    ════════════════════════════════════════════════════════════ */

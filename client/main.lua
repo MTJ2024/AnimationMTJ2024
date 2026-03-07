@@ -67,6 +67,7 @@ local function OpenMenu()
         quickbar    = quickbarAnims,
         currentDict = currentDict,
         currentAnim = currentAnim,
+        openKey     = Config.OpenKey,
     })
 end
 
@@ -78,7 +79,9 @@ local function CloseMenu()
 end
 
 -- ── Tastenbelegungen ─────────────────────────────────────────
-RegisterKeyMapping('+animMenu', 'AnimationMTJ2024 – Menü öffnen', 'keyboard', Config.OpenKey)
+-- Diese Taste erscheint in FiveM-Einstellungen → Tastenbelegung
+-- unter der Kategorie "AnimationMTJ2024" und ist dort frei änderbar.
+RegisterKeyMapping('+animMenu', 'AnimationMTJ2024 – Menü öffnen / schließen', 'keyboard', Config.OpenKey)
 RegisterCommand('+animMenu', function()
     if menuOpen then CloseMenu() else OpenMenu() end
 end, false)
@@ -162,6 +165,7 @@ CreateThread(function()
         SendNUIMessage({
             action   = 'initQuickbar',
             quickbar = quickbarAnims,
+            openKey  = Config.OpenKey,
         })
     end
 end)
