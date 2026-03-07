@@ -12,8 +12,9 @@
 |---|---|
 | 🎨 Dark-Glassmorphism-UI | Lila/Cyan-Gradient, animierte Karten, Hover-Effekte |
 | ⚡ Schnellzugriff-Leiste | 5 konfigurierbare Slots (Numpad 1–5) |
+| ⌨️ Direkte Tastenbelegungen | **Jede** Animation bekommt eine eigene bindbare Taste |
 | 🔍 Live-Suche | Echtzeit-Filterung aller Animationen |
-| 📂 Kategorien | Tanzen, Entspannen, Fitness, Sozial, Emotes, RP/Job |
+| 📂 12 Kategorien | 160+ Animationen: Tanzen, Entspannen, Lifestyle, Sport, Gesten, Emotes, Musik, RP/Jobs, Bar, Betrunken, Polizei, Stances |
 | 🖱️ Rechtsklick-Kontextmenü | Animation direkt einem Quickbar-Slot zuweisen |
 | 🔒 Kopierschutz | Ressourcennamen-Prüfung auf Client & Server |
 | ⚙️ ESX Legacy | Vollständige ESX-Integration |
@@ -80,7 +81,24 @@ Die Animation-Kategorien und alle Einträge sind vollständig in `config.lua` ed
 | Linksklick auf Karte | Animation abspielen / stoppen |
 | Rechtsklick auf Karte | Kontextmenü → Quickbar zuweisen |
 
-> Alle Tasten lassen sich in den **FiveM-Einstellungen → Tastenbelegung** anpassen.
+### ⌨️ Direkte Tastenbelegungen (Standard)
+
+| Taste | Animation |
+|---|---|
+| `J` | Winken |
+| `K` | Daumen hoch |
+| `L` | Daumen runter |
+| `U` | Jubeln |
+| `F6` | Club Dance 1 |
+| `F7` | Rauchen |
+| `F8` | Sonnenbaden |
+| `F9` | Yoga |
+| `F10` | Liegestütze |
+| `F11` | Gitarre |
+
+> Alle Tasten – einschließlich der direkten Animations-Binds – lassen sich in den  
+> **FiveM-Einstellungen → Tastenbelegung → AnimationMTJ2024** frei anpassen.  
+> Alle 20 konfigurierten `DirectKeybinds` erscheinen dort als eigene Einträge.
 
 ---
 

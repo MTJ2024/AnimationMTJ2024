@@ -105,7 +105,27 @@ for i = 1, 5 do
     end, false)
 end
 
--- ── NUI Callbacks ────────────────────────────────────────────
+-- ── Direkte Tastenbelegungen für einzelne Animationen ────────
+-- Jeder Eintrag in Config.DirectKeybinds bekommt ein eigenes
+-- RegisterKeyMapping → in FiveM-Einstellungen → Tastenbelegung
+-- unter "AnimationMTJ2024" frei änderbar.
+for idx, bind in ipairs(Config.DirectKeybinds) do
+    local cmdName = '+animBind' .. idx
+    local desc    = 'AnimationMTJ2024 – ' .. (bind.label or ('Bind ' .. idx))
+    RegisterKeyMapping(cmdName, desc, 'keyboard', bind.key or '')
+    RegisterCommand(cmdName, function()
+        if not bind.dict then return end
+        if currentDict == bind.dict and currentAnim == bind.anim then
+            StopAnimation()
+            SendNUIMessage({ action = 'animStopped' })
+        else
+            PlayAnimation(bind.dict, bind.anim, bind.flag)
+            SendNUIMessage({ action = 'animPlaying', dict = bind.dict, anim = bind.anim })
+        end
+    end, false)
+end
+
+
 RegisterNUICallback('playAnim', function(data, cb)
     PlayAnimation(data.dict, data.anim, data.flag)
     cb({ success = true })

@@ -360,6 +360,11 @@ el.stopBtn.addEventListener('click', doStopAnim);
 el.searchInput.addEventListener('input', e => {
     const v = e.target.value;
     el.searchClear.style.display = v ? 'block' : 'none';
+    // Beim Suchen automatisch auf "Alle Kategorien" umschalten
+    if (v && state.activeCategory !== null) {
+        state.activeCategory = null;
+        renderCategories();
+    }
     renderGrid(v);
 });
 
