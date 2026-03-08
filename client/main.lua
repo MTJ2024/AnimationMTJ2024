@@ -1,4 +1,6 @@
 local isSitting = false
+local lastGenericSeat
+local lastGenericScanAt = 0
 
 local function showPrompt(text)
     BeginTextCommandDisplayHelp('STRING')
@@ -148,6 +150,15 @@ local function getClosestSeat()
         return closestEntity, closestDistance
     end
 
+    local now = GetGameTimer()
+    local genericScanInterval = Config.GenericDetection.scanIntervalMs or 1000
+    if lastGenericSeat and now - lastGenericScanAt < genericScanInterval and DoesEntityExist(lastGenericSeat) then
+        local cachedDistance = #(playerCoords - GetEntityCoords(lastGenericSeat))
+        if cachedDistance < closestDistance and isSeatEntity(lastGenericSeat) then
+            return lastGenericSeat, cachedDistance
+        end
+    end
+
     local objects = GetGamePool('CObject')
     local processed = 0
 
@@ -167,6 +178,9 @@ local function getClosestSeat()
         end
     end
 
+    lastGenericSeat = closestEntity
+    lastGenericScanAt = now
+
     return closestEntity, closestDistance
 end
 
@@ -175,7 +189,13 @@ CreateThread(function()
         return
     end
 
+    local waitStartedAt = GetGameTimer()
+    local waitTimeoutMs = Config.Target.waitTimeoutMs or 15000
+
     while GetResourceState(Config.Target.resource) ~= 'started' do
+        if GetGameTimer() - waitStartedAt > waitTimeoutMs then
+            return
+        end
         Wait(1000)
     end
 

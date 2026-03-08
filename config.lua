@@ -3,7 +3,7 @@ Config = {}
 Config.InteractionDistance = 1.7
 Config.SearchRadius = 3.0
 Config.IdleCheckInterval = 500
-Config.MaxScanObjects = 200
+Config.MaxScanObjects = 200 -- Begrenzung für generische Objekt-Scans (Performance-Tuning)
 Config.SitControl = 38 -- E
 Config.StandControl = 194 -- BACKSPACE
 
@@ -13,7 +13,8 @@ Config.PromptStand = 'Drücke ~INPUT_FRONTEND_RRIGHT~, um aufzustehen'
 Config.Target = {
     enabled = true,
     resource = 'ox_target',
-    useGlobalObject = true
+    useGlobalObject = true,
+    waitTimeoutMs = 15000
 }
 
 Config.DefaultScenario = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER'
@@ -22,6 +23,7 @@ Config.DefaultHeadingOffset = 180.0
 
 Config.GenericDetection = {
     enabled = true,
+    scanIntervalMs = 1000,
     minWidth = 0.25,
     minDepth = 0.25,
     minHeight = 0.30,
