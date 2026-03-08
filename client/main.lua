@@ -1,6 +1,7 @@
 local isSitting = false
 local lastGenericSeat
 local lastGenericScanAt = 0
+local targetRegistered = false
 
 local function showPrompt(text)
     BeginTextCommandDisplayHelp('STRING')
@@ -42,6 +43,32 @@ local function isLikelyFurnitureSeat(entity)
 
     if width > Config.GenericDetection.maxWidth or depth > Config.GenericDetection.maxDepth or height > Config.GenericDetection.maxHeight then
         return false
+    end
+
+    local modelName = ''
+    if GetEntityArchetypeName then
+        modelName = GetEntityArchetypeName(entity)
+    end
+    if modelName and modelName ~= '' then
+        local normalizedModelName = string.lower(modelName)
+
+        for _, blockedKeyword in ipairs(Config.GenericDetection.blacklistKeywords or {}) do
+            if string.find(normalizedModelName, blockedKeyword, 1, true) then
+                return false
+            end
+        end
+
+        local keywordMatch = false
+        for _, keyword in ipairs(Config.GenericDetection.modelKeywords or {}) do
+            if string.find(normalizedModelName, keyword, 1, true) then
+                keywordMatch = true
+                break
+            end
+        end
+
+        if Config.GenericDetection.requireKeywordMatch and not keywordMatch then
+            return false
+        end
     end
 
     return true
@@ -160,18 +187,15 @@ local function getClosestSeat()
     end
 
     local objects = GetGamePool('CObject')
-    local maxObjects = math.min(#objects, Config.MaxScanObjects)
-
-    for i = 1, maxObjects do
+    for i = 1, #objects do
         local entity = objects[i]
         local entityCoords = GetEntityCoords(entity)
         local distance = #(playerCoords - entityCoords)
 
-        if distance < closestDistance and isSeatEntity(entity) then
+        if distance < closestDistance and distance <= Config.SearchRadius and isSeatEntity(entity) then
             closestDistance = distance
             closestEntity = entity
         end
-
     end
 
     lastGenericSeat = closestEntity
@@ -180,23 +204,13 @@ local function getClosestSeat()
     return closestEntity, closestDistance
 end
 
-CreateThread(function()
-    if not Config.Target.enabled then
-        return
+local function registerTargetOptions()
+    if targetRegistered or not Config.Target.enabled then
+        return true
     end
 
-    local waitStartedAt = GetGameTimer()
-    local waitTimeoutMs = Config.Target.waitTimeoutMs or 15000
-
-    while GetResourceState(Config.Target.resource) ~= 'started' do
-        if GetGameTimer() - waitStartedAt > waitTimeoutMs then
-            print(('[AnimationMTJ2024] %s konnte innerhalb von %dms nicht gestartet werden. Nutze Tastatur-Fallback.'):format(
-                Config.Target.resource,
-                waitTimeoutMs
-            ))
-            return
-        end
-        Wait(1000)
+    if GetResourceState(Config.Target.resource) ~= 'started' then
+        return false
     end
 
     local modelNames = {}
@@ -237,6 +251,35 @@ CreateThread(function()
             }
         })
     end
+
+    targetRegistered = true
+    return true
+end
+
+CreateThread(function()
+    if not Config.Target.enabled then
+        return
+    end
+
+    local waitStartedAt = GetGameTimer()
+    local waitTimeoutMs = Config.Target.waitTimeoutMs or 15000
+
+    while not registerTargetOptions() do
+        if GetGameTimer() - waitStartedAt > waitTimeoutMs then
+            print(('[AnimationMTJ2024] %s konnte innerhalb von %dms nicht gestartet werden. Nutze Tastatur-Fallback bis Start erkannt wird.'):format(
+                Config.Target.resource,
+                waitTimeoutMs
+            ))
+            break
+        end
+        Wait(1000)
+    end
+end)
+
+AddEventHandler('onClientResourceStart', function(resourceName)
+    if resourceName == Config.Target.resource then
+        registerTargetOptions()
+    end
 end)
 
 CreateThread(function()
@@ -251,7 +294,7 @@ CreateThread(function()
                 if IsControlJustReleased(0, Config.StandControl) then
                     standUp()
                 end
-            elseif not Config.Target.enabled or GetResourceState(Config.Target.resource) ~= 'started' then
+            elseif not Config.Target.enabled or not targetRegistered then
                 local seatEntity, distance = getClosestSeat()
                 if seatEntity and distance <= Config.InteractionDistance then
                     waitTime = 0

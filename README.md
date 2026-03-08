@@ -15,8 +15,8 @@ ensure AnimationMTJ2024
 ## Konfiguration
 
 - `config.lua` enthält:
-  - Sitzmodelle (Stuhl/Sofa/Bank)
-  - Generische Möbel-Erkennung für zusätzliche Einrichtungsgegenstände
+  - stark erweiterte Sitzmodelle (Stuhl/Sofa/Bank/Tisch-nahe Möbel)
+  - generische Möbel-Erkennung über Modellgröße + Modellnamen-Schlüsselwörter
   - Interaktionsdistanz
   - Tasten für Sitzen/Aufstehen
   - Optionales `ox_target`-Targeting (Fallback auf Taste in der Nähe)
