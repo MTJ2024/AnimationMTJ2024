@@ -3,6 +3,7 @@ Config = {}
 Config.InteractionDistance = 1.7
 Config.SearchRadius = 3.0
 Config.IdleCheckInterval = 500
+Config.MaxScanObjects = 200
 Config.SitControl = 38 -- E
 Config.StandControl = 194 -- BACKSPACE
 
@@ -11,10 +12,23 @@ Config.PromptStand = 'Drücke ~INPUT_FRONTEND_RRIGHT~, um aufzustehen'
 
 Config.Target = {
     enabled = true,
-    resource = 'ox_target'
+    resource = 'ox_target',
+    useGlobalObject = true
 }
 
 Config.DefaultScenario = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER'
+Config.DefaultZOffset = 0.45
+Config.DefaultHeadingOffset = 180.0
+
+Config.GenericDetection = {
+    enabled = true,
+    minWidth = 0.25,
+    minDepth = 0.25,
+    minHeight = 0.30,
+    maxWidth = 3.0,
+    maxDepth = 3.0,
+    maxHeight = 2.0
+}
 
 Config.SeatModels = {
     -- Chairs
