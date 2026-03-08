@@ -8,74 +8,53 @@
 </head>
 <body>
 
-    <!-- ══════════════════════════════════════════════════════ -->
-    <!--   SIDE PANEL  –  schiebt sich von rechts ein          -->
-    <!--   Nie sichtbar während RP – kein Screen-Block         -->
-    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SIDE PANEL – GTA V interaction-menu style, right-docked -->
     <div id="side-panel" class="sp-hidden">
 
         <div id="sp-header">
-            <div id="sp-logo">
-                <span class="sp-logo-icon">🎭</span>
-                <span class="sp-logo-text">
-                    Animation<span class="sp-accent">MTJ</span><span class="sp-year">2024</span>
-                </span>
-            </div>
-            <button id="sp-close" aria-label="Schließen">✕</button>
+            <span id="sp-title">ANIMATIONEN</span>
+            <button id="sp-close" title="Schließen (ESC)">✕</button>
         </div>
 
         <div id="sp-search-bar">
-            <span class="sp-search-ico">🔍</span>
-            <input
-                type="text"
-                id="sp-search"
-                placeholder="Animation suchen …"
-                autocomplete="off"
-                spellcheck="false"
-            />
-            <button id="sp-search-clear" aria-label="Leeren" style="display:none">✕</button>
+            <input id="sp-search" type="text" placeholder="Suchen …"
+                   autocomplete="off" spellcheck="false" />
+            <button id="sp-search-clear" style="display:none">✕</button>
         </div>
 
         <nav id="sp-cats"></nav>
 
         <div id="sp-list-header">
-            <span id="sp-cat-title">Alle Animationen</span>
+            <span id="sp-cat-title">ALLE</span>
             <span id="sp-anim-count"></span>
         </div>
 
         <div id="sp-list-wrap">
             <div id="sp-list"></div>
-            <div id="sp-empty" class="hidden">
-                <span>🔎</span>
-                <p>Keine Animationen gefunden</p>
-            </div>
+            <div id="sp-empty" class="hidden">Keine Animationen gefunden</div>
         </div>
 
         <div id="sp-footer">
-            <button id="sp-stop">⏹ &nbsp;Stoppen</button>
-            <span class="sp-hint">NUM 1–5 &nbsp;·&nbsp; ESC schließt</span>
+            <button id="sp-stop">■ STOPPEN</button>
+            <span class="sp-hint">NUM 1–5  ·  ESC</span>
         </div>
 
     </div>
 
-    <!-- Kontextmenü (Rechtsklick auf Animation) -->
+    <!-- Right-click context menu -->
     <div id="context-menu"></div>
 
-    <!-- ══════════════════════════════════════════════════════ -->
-    <!--   ANIMATIONS-RAD (Wheel) – unverändert                -->
-    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- ANIMATIONS WHEEL (unchanged) -->
     <div id="wheel-overlay" class="hidden">
-
         <div id="wheel-wrap">
-
             <div id="wheel-container">
-                <svg id="wheel-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"></svg>
+                <svg id="wheel-svg" viewBox="0 0 500 500"
+                     xmlns="http://www.w3.org/2000/svg"></svg>
                 <div id="wheel-center">
                     <div id="wheel-center-icon">🎭</div>
                     <div id="wheel-center-name">Wähle<br>Kategorie</div>
                 </div>
             </div>
-
             <div id="wheel-panel" class="wheel-panel-hidden">
                 <div id="wheel-panel-header">
                     <span id="wheel-panel-icon">🎭</span>
@@ -90,21 +69,15 @@
                     <span>Fahre über eine Kategorie</span>
                 </div>
             </div>
-
         </div>
-
         <div id="wheel-quickbar">
             <span class="wqb-label">SCHNELLZUGRIFF</span>
             <div id="wheel-qb-slots"></div>
-            <span class="wqb-label">NUM 1–5 &nbsp;·&nbsp; ⚙️ Tasten in FiveM-Einstellungen</span>
+            <span class="wqb-label">NUM 1–5</span>
         </div>
-
         <div id="wheel-hint">
-            <kbd>ESC</kbd> oder Taste loslassen zum Schließen
-            &nbsp;·&nbsp;
-            <span class="wh-accent">⌨️ Rad-Taste: FiveM-Einstellungen → AnimationMTJ2024</span>
+            <kbd>ESC</kbd> oder Taste loslassen · Rad-Taste in FiveM-Einstellungen bindbar
         </div>
-
     </div>
 
     <script src="app.js"></script>

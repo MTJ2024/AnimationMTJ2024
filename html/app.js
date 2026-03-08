@@ -119,10 +119,12 @@ function renderCategories() {
     el.spCats.innerHTML = '';
 
     const totalCount = state.categories.reduce((n, c) => n + (c.anims?.length ?? 0), 0);
-    el.spCats.appendChild(makeCatPill(null, '✨ Alle', totalCount));
+    el.spCats.appendChild(makeCatPill(null, 'ALLE', totalCount));
 
     for (const cat of state.categories) {
-        el.spCats.appendChild(makeCatPill(cat.id, cat.label, cat.anims?.length ?? 0));
+        /* Strip the leading emoji from the category label for the compact tab */
+        const tabLabel = cat.label.replace(/^\S+\s*/, '').toUpperCase() || cat.label.toUpperCase();
+        el.spCats.appendChild(makeCatPill(cat.id, tabLabel, cat.anims?.length ?? 0));
     }
 }
 
@@ -159,12 +161,12 @@ function renderList(term = '') {
                 list.push({ ...a, catLabel: cat.label });
             }
         }
-        el.spCatTitle.textContent = query ? `Suche: „${term}"` : 'Alle Animationen';
+        el.spCatTitle.textContent = query ? `SUCHE: ${term.toUpperCase()}` : 'ALLE';
     } else {
         const cat = state.categories.find(c => c.id === state.activeCategory);
         if (cat) {
             list = (cat.anims ?? []).map(a => ({ ...a, catLabel: cat.label }));
-            el.spCatTitle.textContent = cat.label;
+            el.spCatTitle.textContent = cat.label.replace(/^\S+\s*/, '').toUpperCase() || cat.label.toUpperCase();
         }
     }
 
