@@ -2,6 +2,7 @@ local isSitting = false
 local lastGenericSeat
 local lastGenericScanAt = 0
 local targetRegistered = false
+local hasArchetypeNameNative = type(GetEntityArchetypeName) == 'function'
 
 local function showPrompt(text)
     BeginTextCommandDisplayHelp('STRING')
@@ -46,7 +47,7 @@ local function isLikelyFurnitureSeat(entity)
     end
 
     local modelName = ''
-    if GetEntityArchetypeName then
+    if hasArchetypeNameNative then
         modelName = GetEntityArchetypeName(entity)
     end
     if modelName and modelName ~= '' then
@@ -266,7 +267,7 @@ CreateThread(function()
 
     while not registerTargetOptions() do
         if GetGameTimer() - waitStartedAt > waitTimeoutMs then
-            print(('[AnimationMTJ2024] %s konnte innerhalb von %dms nicht gestartet werden. Nutze Tastatur-Fallback bis Start erkannt wird.'):format(
+            print(('[AnimationMTJ2024] %s konnte innerhalb von %dms nicht gestartet werden. Nutze Tastatur-Fallback; spätere Starts werden weiter verarbeitet.'):format(
                 Config.Target.resource,
                 waitTimeoutMs
             ))
