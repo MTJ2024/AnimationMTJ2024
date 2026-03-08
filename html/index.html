@@ -8,128 +8,66 @@
 </head>
 <body>
 
-    <!-- ══════════════════════════════════════════════ -->
-    <!--   SCHNELLZUGRIFF-LEISTE (immer sichtbar)       -->
-    <!-- ══════════════════════════════════════════════ -->
-    <div id="quickbar" class="hidden">
-        <div class="quickbar-inner">
-            <div class="quickbar-brand">⚡</div>
-            <div class="quickbar-slots" id="quickbar-slots">
-                <div class="qslot" data-slot="0">
-                    <div class="qslot-key">NUM 1</div>
-                    <div class="qslot-icon">➕</div>
-                    <div class="qslot-name">Leer</div>
-                </div>
-                <div class="qslot" data-slot="1">
-                    <div class="qslot-key">NUM 2</div>
-                    <div class="qslot-icon">➕</div>
-                    <div class="qslot-name">Leer</div>
-                </div>
-                <div class="qslot" data-slot="2">
-                    <div class="qslot-key">NUM 3</div>
-                    <div class="qslot-icon">➕</div>
-                    <div class="qslot-name">Leer</div>
-                </div>
-                <div class="qslot" data-slot="3">
-                    <div class="qslot-key">NUM 4</div>
-                    <div class="qslot-icon">➕</div>
-                    <div class="qslot-name">Leer</div>
-                </div>
-                <div class="qslot" data-slot="4">
-                    <div class="qslot-key">NUM 5</div>
-                    <div class="qslot-icon">➕</div>
-                    <div class="qslot-name">Leer</div>
-                </div>
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!--   SIDE PANEL  –  schiebt sich von rechts ein          -->
+    <!--   Nie sichtbar während RP – kein Screen-Block         -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div id="side-panel" class="sp-hidden">
+
+        <div id="sp-header">
+            <div id="sp-logo">
+                <span class="sp-logo-icon">🎭</span>
+                <span class="sp-logo-text">
+                    Animation<span class="sp-accent">MTJ</span><span class="sp-year">2024</span>
+                </span>
+            </div>
+            <button id="sp-close" aria-label="Schließen">✕</button>
+        </div>
+
+        <div id="sp-search-bar">
+            <span class="sp-search-ico">🔍</span>
+            <input
+                type="text"
+                id="sp-search"
+                placeholder="Animation suchen …"
+                autocomplete="off"
+                spellcheck="false"
+            />
+            <button id="sp-search-clear" aria-label="Leeren" style="display:none">✕</button>
+        </div>
+
+        <nav id="sp-cats"></nav>
+
+        <div id="sp-list-header">
+            <span id="sp-cat-title">Alle Animationen</span>
+            <span id="sp-anim-count"></span>
+        </div>
+
+        <div id="sp-list-wrap">
+            <div id="sp-list"></div>
+            <div id="sp-empty" class="hidden">
+                <span>🔎</span>
+                <p>Keine Animationen gefunden</p>
             </div>
         </div>
+
+        <div id="sp-footer">
+            <button id="sp-stop">⏹ &nbsp;Stoppen</button>
+            <span class="sp-hint">NUM 1–5 &nbsp;·&nbsp; ESC schließt</span>
+        </div>
+
     </div>
 
-    <!-- ══════════════════════════════════════════════ -->
-    <!--   HAUPT-MENÜ OVERLAY                           -->
-    <!-- ══════════════════════════════════════════════ -->
-    <div id="overlay" class="hidden">
-
-        <div id="menu">
-
-            <!-- Header -->
-            <header id="menu-header">
-                <div id="menu-logo">
-                    <span class="logo-icon">🎭</span>
-                    <span class="logo-text">
-                        Animation<span class="logo-accent">MTJ</span><span class="logo-year">2024</span>
-                    </span>
-                </div>
-                <div id="menu-meta">
-                    <span class="badge-version">v1.0.0</span>
-                    <span class="badge-copy">© 2024 MTJ2024</span>
-                    <button id="close-btn" aria-label="Schließen">✕</button>
-                </div>
-            </header>
-
-            <!-- Suchleiste -->
-            <div id="search-bar">
-                <div class="search-wrap">
-                    <span class="search-ico">🔍</span>
-                    <input
-                        type="text"
-                        id="search-input"
-                        placeholder="Animation suchen …"
-                        autocomplete="off"
-                        spellcheck="false"
-                    />
-                    <button id="search-clear" aria-label="Leeren" style="display:none">✕</button>
-                </div>
-            </div>
-
-            <!-- Hauptbereich: Sidebar + Grid -->
-            <div id="menu-body">
-
-                <!-- Kategorie-Sidebar -->
-                <nav id="sidebar">
-                    <p class="sidebar-label">KATEGORIEN</p>
-                    <div id="category-list"></div>
-                    <div class="sidebar-footer">
-                        <button id="stop-btn">⏹ &nbsp;Animation stoppen</button>
-                    </div>
-                </nav>
-
-                <!-- Animations-Grid -->
-                <section id="anim-content">
-                    <h2 id="category-title">Alle Animationen</h2>
-                    <div id="anim-grid"></div>
-                    <div id="no-results" class="hidden">
-                        <div class="nr-icon">🔎</div>
-                        <p>Keine Animationen gefunden</p>
-                    </div>
-                </section>
-
-            </div><!-- /menu-body -->
-
-            <!-- Footer -->
-            <footer id="menu-footer">
-                <span>💡 Rechtsklick auf eine Animation → Schnellzugriff-Slot zuweisen</span>
-                <span class="footer-keyhint">
-                    Schließen: <kbd>ESC</kbd> oder <kbd id="footer-open-key">F5</kbd>
-                    &nbsp;·&nbsp;
-                    <span class="footer-rebind-hint" title="FiveM-Einstellungen → Tastenbelegung → AnimationMTJ2024">⚙️ Taste änderbar</span>
-                </span>
-            </footer>
-
-        </div><!-- /menu -->
-
-    </div><!-- /overlay -->
-
-    <!-- Kontextmenü (rechtsklick auf Karte) -->
+    <!-- Kontextmenü (Rechtsklick auf Animation) -->
     <div id="context-menu"></div>
 
-    <!-- ══════════════════════════════════════════════ -->
-    <!--   ANIMATIONS-RAD (Wheel)                       -->
-    <!-- ══════════════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!--   ANIMATIONS-RAD (Wheel) – unverändert                -->
+    <!-- ══════════════════════════════════════════════════════ -->
     <div id="wheel-overlay" class="hidden">
 
         <div id="wheel-wrap">
 
-            <!-- SVG-Rad -->
             <div id="wheel-container">
                 <svg id="wheel-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"></svg>
                 <div id="wheel-center">
@@ -138,7 +76,6 @@
                 </div>
             </div>
 
-            <!-- Animations-Panel (erscheint beim Hover über Segment) -->
             <div id="wheel-panel" class="wheel-panel-hidden">
                 <div id="wheel-panel-header">
                     <span id="wheel-panel-icon">🎭</span>
@@ -156,21 +93,19 @@
 
         </div>
 
-        <!-- Quickbar-Slots im Wheel (zeigt aktuelle Belegung) -->
         <div id="wheel-quickbar">
             <span class="wqb-label">SCHNELLZUGRIFF</span>
             <div id="wheel-qb-slots"></div>
             <span class="wqb-label">NUM 1–5 &nbsp;·&nbsp; ⚙️ Tasten in FiveM-Einstellungen</span>
         </div>
 
-        <!-- Hint-Leiste -->
         <div id="wheel-hint">
             <kbd>ESC</kbd> oder Taste loslassen zum Schließen
             &nbsp;·&nbsp;
             <span class="wh-accent">⌨️ Rad-Taste: FiveM-Einstellungen → AnimationMTJ2024</span>
         </div>
 
-    </div><!-- /wheel-overlay -->
+    </div>
 
     <script src="app.js"></script>
 </body>

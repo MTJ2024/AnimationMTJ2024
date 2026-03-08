@@ -7,71 +7,58 @@
 
 'use strict';
 
-/* ── Hilfsfunktion: FiveM-Ressourcenname ─────────────────────
-   In FiveM steht window.GetParentResourceName() bereit.
-   Fallback für lokale Entwicklung/Vorschau.               */
+/* ── FiveM resource name helper ─────────────────────────────── */
 function getResourceName() {
     return (typeof window.GetParentResourceName === 'function')
         ? window.GetParentResourceName()
         : 'AnimationMTJ2024';
 }
 
-/* ── Daten-State ─────────────────────────────────────────────── */
+/* ── State ──────────────────────────────────────────────────── */
 const state = {
-    categories:   [],
-    quickbar:     Array(5).fill(null),
-    activeCategory: null,    // null = "Alle"
-    currentDict:  null,
-    currentAnim:  null,
-    ctxTarget:    null,      // Animation für Kontextmenü
+    categories:     [],
+    quickbar:       Array(5).fill(null),
+    activeCategory: null,   // null = "Alle"
+    currentDict:    null,
+    currentAnim:    null,
+    ctxTarget:      null,
 };
 
-/* ── DOM-Referenzen ──────────────────────────────────────────── */
+/* ── DOM refs – Side Panel ──────────────────────────────────── */
 const el = {
-    overlay:       document.getElementById('overlay'),
-    quickbar:      document.getElementById('quickbar'),
-    qbSlots:       document.querySelectorAll('.qslot'),
-    searchInput:   document.getElementById('search-input'),
-    searchClear:   document.getElementById('search-clear'),
-    categoryList:  document.getElementById('category-list'),
-    animGrid:      document.getElementById('anim-grid'),
-    noResults:     document.getElementById('no-results'),
-    catTitle:      document.getElementById('category-title'),
-    closeBtn:      document.getElementById('close-btn'),
-    stopBtn:       document.getElementById('stop-btn'),
-    ctxMenu:       document.getElementById('context-menu'),
+    panel:       document.getElementById('side-panel'),
+    spClose:     document.getElementById('sp-close'),
+    spSearch:    document.getElementById('sp-search'),
+    spSearchClr: document.getElementById('sp-search-clear'),
+    spCats:      document.getElementById('sp-cats'),
+    spCatTitle:  document.getElementById('sp-cat-title'),
+    spAnimCount: document.getElementById('sp-anim-count'),
+    spList:      document.getElementById('sp-list'),
+    spEmpty:     document.getElementById('sp-empty'),
+    spStop:      document.getElementById('sp-stop'),
+    ctxMenu:     document.getElementById('context-menu'),
 };
 
 /* ════════════════════════════════════════════════════════════
-   NUI-Nachrichten empfangen
+   NUI message handler
    ════════════════════════════════════════════════════════════ */
 window.addEventListener('message', ({ data }) => {
     switch (data.action) {
 
         case 'openMenu':
-            state.categories  = data.categories  || [];
-            state.quickbar    = data.quickbar     || Array(5).fill(null);
-            state.currentDict = data.currentDict  || null;
-            state.currentAnim = data.currentAnim  || null;
-            if (data.openKey) {
-                const k = document.getElementById('footer-open-key');
-                if (k) k.textContent = data.openKey;
-            }
-            openMenu();
+            state.categories     = data.categories  || [];
+            state.quickbar       = data.quickbar     || Array(5).fill(null);
+            state.currentDict    = data.currentDict  || null;
+            state.currentAnim    = data.currentAnim  || null;
+            openPanel();
             break;
 
         case 'closeMenu':
-            closeMenuLocal();
+            closePanelLocal();
             break;
 
         case 'initQuickbar':
             state.quickbar = data.quickbar || Array(5).fill(null);
-            if (data.openKey) {
-                const k = document.getElementById('footer-open-key');
-                if (k) k.textContent = data.openKey;
-            }
-            renderQuickbar();
-            // Quickbar-HUD wird nie eingeblendet – nur Zustand intern speichern
             break;
 
         case 'animPlaying':
@@ -101,84 +88,83 @@ window.addEventListener('message', ({ data }) => {
 });
 
 /* ════════════════════════════════════════════════════════════
-   Menü öffnen / schließen
+   Side Panel open / close
    ════════════════════════════════════════════════════════════ */
-function openMenu() {
+function openPanel() {
     state.activeCategory = null;
-    el.searchInput.value  = '';
-    el.searchClear.style.display = 'none';
+    el.spSearch.value = '';
+    el.spSearchClr.style.display = 'none';
     renderCategories();
-    renderGrid();
-    renderQuickbar();
-    el.overlay.classList.remove('hidden');
-    setTimeout(() => el.searchInput.focus(), 80);
+    renderList();
+    el.panel.classList.remove('sp-hidden');
+    setTimeout(() => el.spSearch.focus(), 80);
 }
 
-function closeMenuLocal() {
-    el.overlay.classList.add('hidden');
-    el.searchInput.value = '';
-    el.searchClear.style.display = 'none';
+function closePanelLocal() {
+    el.panel.classList.add('sp-hidden');
+    el.spSearch.value = '';
+    el.spSearchClr.style.display = 'none';
     hideCtxMenu();
 }
 
-function closeMenuNUI() {
-    closeMenuLocal();
+function closePanelNUI() {
+    closePanelLocal();
     nuiFetch('closeMenu', {});
 }
 
 /* ════════════════════════════════════════════════════════════
-   Kategorien rendern
+   Render categories as horizontal pill tabs
    ════════════════════════════════════════════════════════════ */
 function renderCategories() {
-    el.categoryList.innerHTML = '';
+    el.spCats.innerHTML = '';
 
     const totalCount = state.categories.reduce((n, c) => n + (c.anims?.length ?? 0), 0);
-    el.categoryList.appendChild(makeCatItem(null, '✨ Alle', totalCount));
+    el.spCats.appendChild(makeCatPill(null, '✨ Alle', totalCount));
 
     for (const cat of state.categories) {
-        el.categoryList.appendChild(makeCatItem(cat.id, cat.label, cat.anims?.length ?? 0));
+        el.spCats.appendChild(makeCatPill(cat.id, cat.label, cat.anims?.length ?? 0));
     }
 }
 
-function makeCatItem(id, label, count) {
-    const div = document.createElement('div');
-    div.className = 'cat-item' + (state.activeCategory === id ? ' active' : '');
-    div.dataset.id = id ?? '__all__';
-    div.innerHTML = `<span>${label}</span><span class="cat-count">${count}</span>`;
-    div.addEventListener('click', () => selectCategory(id));
-    return div;
+function makeCatPill(id, label, count) {
+    const btn = document.createElement('button');
+    btn.className = 'sp-cat' + (state.activeCategory === id ? ' active' : '');
+    btn.dataset.id = id ?? '__all__';
+    btn.textContent = label;
+    btn.title = `${count} Animation${count !== 1 ? 'en' : ''}`;
+    btn.addEventListener('click', () => selectCategory(id));
+    return btn;
 }
 
 function selectCategory(id) {
     state.activeCategory = id;
-    el.searchInput.value = '';
-    el.searchClear.style.display = 'none';
+    el.spSearch.value = '';
+    el.spSearchClr.style.display = 'none';
     renderCategories();
-    renderGrid();
+    renderList();
 }
 
 /* ════════════════════════════════════════════════════════════
-   Animations-Grid rendern
+   Render animation list as rows
    ════════════════════════════════════════════════════════════ */
-function renderGrid(term = '') {
-    el.animGrid.innerHTML = '';
+function renderList(term = '') {
+    el.spList.innerHTML = '';
     const query = term.toLowerCase().trim();
 
     let list = [];
 
     if (state.activeCategory === null) {
-        // Alle Kategorien
         for (const cat of state.categories) {
             for (const a of (cat.anims ?? [])) {
                 list.push({ ...a, catLabel: cat.label });
             }
         }
-        el.catTitle.textContent = query ? `Suche: „${term}"` : 'Alle Animationen';
+        el.spCatTitle.textContent = query ? `Suche: „${term}"` : 'Alle Animationen';
     } else {
         const cat = state.categories.find(c => c.id === state.activeCategory);
         if (cat) {
             list = (cat.anims ?? []).map(a => ({ ...a, catLabel: cat.label }));
-            el.catTitle.textContent = cat.label;
+            el.spCatTitle.textContent = cat.label;
         }
     }
 
@@ -186,86 +172,50 @@ function renderGrid(term = '') {
         list = list.filter(a => a.label.toLowerCase().includes(query));
     }
 
+    el.spAnimCount.textContent = list.length ? `${list.length}` : '';
+
     if (list.length === 0) {
-        el.noResults.classList.remove('hidden');
-        el.animGrid.style.display = 'none';
+        el.spEmpty.classList.remove('hidden');
+        el.spList.style.display = 'none';
         return;
     }
 
-    el.noResults.classList.add('hidden');
-    el.animGrid.style.display = '';
+    el.spEmpty.classList.add('hidden');
+    el.spList.style.display = '';
 
     for (const anim of list) {
-        el.animGrid.appendChild(makeCard(anim));
+        el.spList.appendChild(makeRow(anim));
     }
 }
 
-/* ── Passendes Emoji für eine Animation ──────────────────────── */
-function pickEmoji(label = '', catLabel = '') {
-    const t = (label + ' ' + catLabel).toLowerCase();
-    if (/dance|tanz|club/.test(t))                    return '🕺';
-    if (/yoga/.test(t))                               return '🧘';
-    if (/push.up|liegestütz/.test(t))                 return '🤸';
-    if (/sit.up/.test(t))                             return '🏋️';
-    if (/flex/.test(t))                               return '💪';
-    if (/jog|jogg/.test(t))                           return '🏃';
-    if (/sitz|picnic|boden/.test(t))                  return '🪑';
-    if (/lieg|sunbath|sonnen/.test(t))                return '☀️';
-    if (/rauch|smok/.test(t))                         return '🚬';
-    if (/trink|drink/.test(t))                        return '🍺';
-    if (/essen|eat/.test(t))                          return '🍽️';
-    if (/telefon|phone|film/.test(t))                 return '📱';
-    if (/chill|hang|lean|lehr/.test(t))               return '😎';
-    if (/jubel|cheer/.test(t))                        return '🎉';
-    if (/klatsch|clap/.test(t))                       return '👏';
-    if (/wink/.test(t))                               return '👋';
-    if (/zeig|point/.test(t))                         return '👉';
-    if (/daumen.hoch|thumb.*up/.test(t))              return '👍';
-    if (/daumen.runter|thumb.*down/.test(t))          return '👎';
-    if (/kopf|nod/.test(t))                           return '🙂';
-    if (/erschreck|shock/.test(t))                    return '😱';
-    if (/gelangweilt|bored/.test(t))                  return '😴';
-    if (/lach|laugh/.test(t))                         return '😂';
-    if (/rock/.test(t))                               return '✊';
-    if (/paper|papier/.test(t))                       return '✋';
-    if (/schere|scissors/.test(t))                    return '✌️';
-    if (/untersuchen|invest/.test(t))                 return '🔍';
-    if (/schweiß|weld/.test(t))                       return '🔧';
-    if (/klemmbrett|clipboard/.test(t))               return '📋';
-    if (/beten|pray/.test(t))                         return '🙏';
-    if (/schreib|pc|office/.test(t))                  return '💻';
-    return '🎭';
-}
+function makeRow(anim) {
+    const row = document.createElement('div');
+    row.className = 'sp-row';
+    row.dataset.dict  = anim.dict;
+    row.dataset.anim  = anim.anim;
+    row.dataset.flag  = anim.flag ?? 1;
+    row.dataset.label = anim.label;
 
-function makeCard(anim) {
-    const card = document.createElement('div');
-    card.className = 'anim-card';
-    card.dataset.dict  = anim.dict;
-    card.dataset.anim  = anim.anim;
-    card.dataset.flag  = anim.flag ?? 1;
-    card.dataset.label = anim.label;
+    if (state.currentDict === anim.dict && state.currentAnim === anim.anim) {
+        row.classList.add('playing');
+    }
 
-    const playing = state.currentDict === anim.dict && state.currentAnim === anim.anim;
-    if (playing) card.classList.add('playing');
-
-    card.innerHTML = `
-        <div class="card-pulse"></div>
-        <div class="card-icon">${pickEmoji(anim.label, anim.catLabel)}</div>
-        <div class="card-name">${anim.label}</div>
-        <div class="card-cat">${anim.catLabel ?? ''}</div>
+    row.innerHTML = `
+        <span class="sp-row-icon">${pickEmoji(anim.label, anim.catLabel)}</span>
+        <span class="sp-row-label">${anim.label}</span>
+        <span class="sp-row-dot"></span>
     `;
 
-    card.addEventListener('click',       () => onCardClick(anim));
-    card.addEventListener('contextmenu', (e) => onCardRightClick(e, anim));
-    return card;
+    row.addEventListener('click',       () => onRowClick(anim));
+    row.addEventListener('contextmenu', (e) => onRowRightClick(e, anim));
+    return row;
 }
 
 /* ════════════════════════════════════════════════════════════
-   Animation abspielen / stoppen
+   Play / stop
    ════════════════════════════════════════════════════════════ */
-function onCardClick(anim) {
-    const isPlaying = state.currentDict === anim.dict && state.currentAnim === anim.anim;
-    if (isPlaying) {
+function onRowClick(anim) {
+    if (state.currentDict === anim.dict && state.currentAnim === anim.anim) {
         doStopAnim();
     } else {
         doPlayAnim(anim.dict, anim.anim, anim.flag ?? 1);
@@ -286,38 +236,65 @@ function doStopAnim() {
     syncPlayingUI();
 }
 
-/** Alle Karten- und Quickbar-Highlights aktualisieren */
 function syncPlayingUI() {
-    document.querySelectorAll('.anim-card').forEach(c => {
-        c.classList.toggle('playing', c.dataset.dict === state.currentDict && c.dataset.anim === state.currentAnim);
+    document.querySelectorAll('.sp-row').forEach(r => {
+        r.classList.toggle('playing',
+            r.dataset.dict === state.currentDict &&
+            r.dataset.anim === state.currentAnim);
     });
-    syncQuickbarActive();
+    syncWheelPlaying();
 }
 
 /* ════════════════════════════════════════════════════════════
-   Schnellzugriff-Leiste
+   Quickbar – internal state only, no on-screen bar
    ════════════════════════════════════════════════════════════ */
 function renderQuickbar() {
-    el.qbSlots.forEach((slot, i) => {
-        const data = state.quickbar[i];
-        slot.querySelector('.qslot-icon').textContent = data?.dict ? pickEmoji(data.label) : '➕';
-        slot.querySelector('.qslot-name').textContent = data?.label ?? 'Leer';
-    });
-    syncQuickbarActive();
-}
-
-function syncQuickbarActive() {
-    el.qbSlots.forEach((slot, i) => {
-        const d = state.quickbar[i];
-        const on = d?.dict && d.dict === state.currentDict && d.anim === state.currentAnim;
-        slot.classList.toggle('active', !!on);
-    });
+    // Quickbar is off-screen; state is kept for Numpad key support.
 }
 
 /* ════════════════════════════════════════════════════════════
-   Kontextmenü (Rechtsklick auf Karte)
+   Emoji helper
    ════════════════════════════════════════════════════════════ */
-function onCardRightClick(e, anim) {
+function pickEmoji(label = '', catLabel = '') {
+    const t = (label + ' ' + catLabel).toLowerCase();
+    if (/dance|tanz|club/.test(t))               return '🕺';
+    if (/yoga/.test(t))                          return '🧘';
+    if (/push.up|liegestütz/.test(t))            return '🤸';
+    if (/sit.up/.test(t))                        return '🏋️';
+    if (/flex/.test(t))                          return '💪';
+    if (/jog|jogg/.test(t))                      return '🏃';
+    if (/sitz|picnic|boden/.test(t))             return '🪑';
+    if (/lieg|sunbath|sonnen/.test(t))           return '☀️';
+    if (/rauch|smok/.test(t))                    return '🚬';
+    if (/trink|drink/.test(t))                   return '🍺';
+    if (/essen|eat/.test(t))                     return '🍽️';
+    if (/telefon|phone|film/.test(t))            return '📱';
+    if (/chill|hang|lean|lehr/.test(t))          return '😎';
+    if (/jubel|cheer/.test(t))                   return '🎉';
+    if (/klatsch|clap/.test(t))                  return '👏';
+    if (/wink/.test(t))                          return '👋';
+    if (/zeig|point/.test(t))                    return '👉';
+    if (/daumen.hoch|thumb.*up/.test(t))         return '👍';
+    if (/daumen.runter|thumb.*down/.test(t))     return '👎';
+    if (/kopf|nod/.test(t))                      return '🙂';
+    if (/erschreck|shock/.test(t))               return '😱';
+    if (/gelangweilt|bored/.test(t))             return '😴';
+    if (/lach|laugh/.test(t))                    return '😂';
+    if (/rock/.test(t))                          return '✊';
+    if (/paper|papier/.test(t))                  return '✋';
+    if (/schere|scissors/.test(t))               return '✌️';
+    if (/untersuchen|invest/.test(t))            return '🔍';
+    if (/schweiß|weld/.test(t))                  return '🔧';
+    if (/klemmbrett|clipboard/.test(t))          return '📋';
+    if (/beten|pray/.test(t))                    return '🙏';
+    if (/schreib|pc|office/.test(t))             return '💻';
+    return '🎭';
+}
+
+/* ════════════════════════════════════════════════════════════
+   Context menu (right-click → assign quickbar slot)
+   ════════════════════════════════════════════════════════════ */
+function onRowRightClick(e, anim) {
     e.preventDefault();
     state.ctxTarget = anim;
     buildCtxMenu();
@@ -341,7 +318,7 @@ function buildCtxMenu() {
     `).join('');
 
     el.ctxMenu.innerHTML = `
-        <div class="ctx-label">Schnellzugriff</div>
+        <div class="ctx-label">Schnellzugriff (NUM)</div>
         ${slots}
         <hr class="ctx-divider">
         <div class="ctx-item ctx-play" id="ctx-play-btn">
@@ -362,43 +339,38 @@ function buildCtxMenu() {
 function assignToQuickbar(index) {
     const anim = state.ctxTarget;
     if (!anim) return;
-
     state.quickbar[index] = { label: anim.label, dict: anim.dict, anim: anim.anim, flag: anim.flag ?? 1 };
-    renderQuickbar();
-    // Quickbar-HUD bleibt immer versteckt
-
     nuiFetch('setQuickbar', { slot: index + 1, label: anim.label, dict: anim.dict, anim: anim.anim, flag: anim.flag ?? 1 });
     hideCtxMenu();
 }
 
 /* ════════════════════════════════════════════════════════════
-   Event-Listener
+   Event listeners – Side Panel
    ════════════════════════════════════════════════════════════ */
-el.closeBtn.addEventListener('click', closeMenuNUI);
-el.stopBtn.addEventListener('click', doStopAnim);
+el.spClose.addEventListener('click', closePanelNUI);
+el.spStop.addEventListener('click', doStopAnim);
 
-el.searchInput.addEventListener('input', e => {
+el.spSearch.addEventListener('input', e => {
     const v = e.target.value;
-    el.searchClear.style.display = v ? 'block' : 'none';
-    // Beim Suchen automatisch auf "Alle Kategorien" umschalten
+    el.spSearchClr.style.display = v ? 'block' : 'none';
     if (v && state.activeCategory !== null) {
         state.activeCategory = null;
         renderCategories();
     }
-    renderGrid(v);
+    renderList(v);
 });
 
-el.searchClear.addEventListener('click', () => {
-    el.searchInput.value = '';
-    el.searchClear.style.display = 'none';
-    renderGrid();
-    el.searchInput.focus();
+el.spSearchClr.addEventListener('click', () => {
+    el.spSearch.value = '';
+    el.spSearchClr.style.display = 'none';
+    renderList();
+    el.spSearch.focus();
 });
 
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         if (wheelOpen) closeWheelNUI();
-        else closeMenuNUI();
+        else           closePanelNUI();
     }
 });
 
@@ -408,28 +380,24 @@ document.addEventListener('click', e => {
     }
 });
 
-/* Rechtsklick außerhalb von Karten verhindern (kein Browser-Kontextmenü) */
 document.addEventListener('contextmenu', e => {
-    if (!e.target.closest('.anim-card')) e.preventDefault();
+    if (!e.target.closest('.sp-row')) e.preventDefault();
 });
 
 /* ════════════════════════════════════════════════════════════
-   NUI-Fetch-Wrapper
+   NUI fetch wrapper
    ════════════════════════════════════════════════════════════ */
 function nuiFetch(endpoint, data) {
     fetch(`https://${getResourceName()}/${endpoint}`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(data ?? {}),
-    }).catch(() => { /* NUI nicht verfügbar (z. B. Browser-Vorschau) */ });
+    }).catch(() => {});
 }
 
 /* ════════════════════════════════════════════════════════════
-   ANIMATIONS-RAD (Wheel)
-   SVG-basiertes Rad mit 12 Kategorien – GTA-Waffenrad-Stil.
-   Halten = offen, Loslassen = geschlossen. Klick = Animation.
+   ANIMATIONS-RAD (Wheel) – unverändert
    ════════════════════════════════════════════════════════════ */
-
 const wEl = {
     overlay:  document.getElementById('wheel-overlay'),
     svg:      document.getElementById('wheel-svg'),
@@ -447,7 +415,6 @@ const wEl = {
 
 let wheelOpen = false;
 
-/* Colour palette – alternating purple/cyan tones per segment */
 const W_PALETTE = [
     [139, 92, 246], [6, 182, 212], [168, 85, 247], [14, 165, 233],
     [124, 58, 237], [34, 211, 238], [109, 40, 217], [56, 189, 248],
@@ -477,7 +444,14 @@ function closeWheelNUI() {
     nuiFetch('closeWheel', {});
 }
 
-/* ── Build SVG Wheel ─────────────────────────────────────── */
+function syncWheelPlaying() {
+    wEl.pList.querySelectorAll('.wheel-anim-item').forEach(item => {
+        item.classList.toggle('playing',
+            item.dataset.dict === state.currentDict &&
+            item.dataset.anim === state.currentAnim);
+    });
+}
+
 function buildWheel() {
     const svg  = wEl.svg;
     svg.innerHTML = '';
@@ -520,11 +494,10 @@ function buildWheel() {
         path.addEventListener('mouseenter', () => onWheelHover(i));
         svg.appendChild(path);
 
-        /* Labels */
         const LR = (R_OUT + R_IN) / 2;
         const lx = +px(LR, midA), ly = +py(LR, midA);
         const si    = cat.label.search(/\s/);
-        const icon  = si > -1 ? cat.label.slice(0, si) : '🎭';
+        const icon  = si > -1 ? cat.label.slice(0, si) : '��';
         const name  = si > -1 ? cat.label.slice(si + 1) : cat.label;
         const short = name.length > 10 ? name.slice(0, 9) + '…' : name;
         const fs    = N > 9 ? '8.5' : '9.5';
@@ -547,7 +520,6 @@ function buildWheel() {
     });
 }
 
-/* ── Segment hover ───────────────────────────────────────── */
 function onWheelHover(idx) {
     wEl.svg.querySelectorAll('path[data-idx]').forEach(p => {
         const pi = +p.getAttribute('data-idx');
@@ -575,7 +547,6 @@ function onWheelHover(idx) {
     showWheelPanel(idx);
 }
 
-/* ── Animation list panel ────────────────────────────────── */
 function showWheelPanel(catIdx) {
     const cat = state.categories[catIdx];
     if (!cat) return;
@@ -596,6 +567,8 @@ function showWheelPanel(catIdx) {
         const playing = state.currentDict === anim.dict && state.currentAnim === anim.anim;
         const item = document.createElement('div');
         item.className = 'wheel-anim-item' + (playing ? ' playing' : '');
+        item.dataset.dict = anim.dict;
+        item.dataset.anim = anim.anim;
         item.innerHTML = `
             <span class="wheel-anim-icon">${pickEmoji(anim.label, cat.label)}</span>
             <span class="wheel-anim-label">${anim.label}</span>
@@ -614,7 +587,6 @@ function showWheelPanel(catIdx) {
     wEl.panel.classList.remove('wheel-panel-hidden');
 }
 
-/* ── Wheel Quickbar strip ────────────────────────────────── */
 function renderWheelQuickbar() {
     wEl.qbSlots.innerHTML = '';
     state.quickbar.forEach((slot, i) => {
