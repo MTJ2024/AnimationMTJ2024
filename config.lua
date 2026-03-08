@@ -2,6 +2,7 @@ Config = {}
 
 Config.InteractionDistance = 1.7
 Config.SearchRadius = 3.0
+Config.IdleCheckInterval = 500
 Config.SitControl = 38 -- E
 Config.StandControl = 194 -- BACKSPACE
 

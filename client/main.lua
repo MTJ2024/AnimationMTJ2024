@@ -119,7 +119,7 @@ end)
 
 CreateThread(function()
     while true do
-        local waitTime = 500
+        local waitTime = Config.IdleCheckInterval or 500
         local ped = PlayerPedId()
 
         if not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, false) then
