@@ -8,6 +8,7 @@ FiveM-Ressource für ein einfaches Sitz-Target-System (Stühle, Sofas, Bänke).
 2. In `server.cfg` eintragen:
 
 ```cfg
+ensure ox_target
 ensure AnimationMTJ2024
 ```
 

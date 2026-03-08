@@ -10,3 +10,5 @@ version '1.0.0'
 
 shared_script 'config.lua'
 client_script 'client/main.lua'
+
+dependency 'ox_target'
