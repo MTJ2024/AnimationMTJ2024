@@ -122,7 +122,7 @@ button { font-family: var(--font); cursor:pointer; border:none; outline:none; }
     font-size: 10px;
     min-width: 0;
 }
-#sp-search::placeholder { color: var(--t3); font-size: 10px; }
+#sp-search::placeholder { color: var(--t3); }
 #sp-search-clear {
     background: none; color: var(--t3);
     font-size: 9px; padding: 0 2px; border-radius: 1px;
@@ -209,8 +209,7 @@ button { font-family: var(--font); cursor:pointer; border:none; outline:none; }
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     transition: color .08s; min-width: 0;
 }
-.sp-row:hover .sp-row-label,
-.sp-row.playing .sp-row-label { color: var(--t1); }
+.sp-row:hover .sp-row-label  { color: var(--t1); }
 .sp-row.playing .sp-row-label { font-weight: 600; color: var(--amber); }
 
 /* playing pulse dot */
