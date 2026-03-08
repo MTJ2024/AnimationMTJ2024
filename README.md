@@ -1,6 +1,6 @@
 # AnimationMTJ2024
 
-FiveM-Ressource für ein einfaches Sitz-Target-System (Stühle, Sofas, Bänke).
+FiveM-Ressource für Sitz-Interaktion (Stühle, Sofas, Bänke) und ein einfaches normales Animationsmenü.
 
 ## Installation
 
@@ -26,3 +26,5 @@ ensure AnimationMTJ2024
 - **Mit ox_target**: Öffne das Target-Menü (Third Eye, meist `ALT`) auf dem Stuhl/Sofa/Bank und wähle **Sitzen**.
 - **Tastatur-Fallback (immer aktiv)**: Stelle dich nahe an ein erkennbares Möbelstück und drücke **E**.
 - **Aufstehen**: **BACKSPACE**.
+- **Normales Animationsmenü**: Drücke **F6** oder nutze den Command **/animmenu**.
+- **Menü-Steuerung**: Pfeil hoch/runter auswählen, **ENTER** abspielen, **X** stoppen, **BACKSPACE** schließen.

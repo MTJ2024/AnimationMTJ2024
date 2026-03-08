@@ -4,11 +4,75 @@ local lastGenericScanAt = 0
 local targetRegistered = false
 local hasArchetypeNameNative = type(GetEntityArchetypeName) == 'function'
 local allowKeyboardFallbackWithTarget = Config.AllowKeyboardFallbackWithTarget
+local animationMenuOpen = false
+local animationMenuIndex = 1
+local animationMenuConfig = Config.AnimationMenu or {}
+local animationMenuEnabled = animationMenuConfig.enabled == true
+local animationMenuEntries = animationMenuConfig.entries or {}
+local animationMenuCommand = animationMenuConfig.openCommand or 'animmenu'
 
 local function showPrompt(text)
     BeginTextCommandDisplayHelp('STRING')
     AddTextComponentSubstringPlayerName(text)
     EndTextCommandDisplayHelp(0, false, true, -1)
+end
+
+local function stopCurrentAction()
+    ClearPedTasks(PlayerPedId())
+    isSitting = false
+end
+
+local function showAnimationMenuPrompt()
+    if #animationMenuEntries == 0 then
+        showPrompt('Animationsmenü: keine Einträge konfiguriert')
+        return
+    end
+
+    local currentEntry = animationMenuEntries[animationMenuIndex]
+    local basePrompt = animationMenuConfig.prompt or 'Animationsmenü: ↑/↓ auswählen, Enter abspielen, Backspace schließen, X stoppen'
+    local label = currentEntry.label or 'Unbenannt'
+    showPrompt(('%s~n~Aktuell: ~y~%s~s~ (%d/%d)'):format(basePrompt, label, animationMenuIndex, #animationMenuEntries))
+end
+
+local function playAnimationEntry(entry)
+    if not entry then
+        return
+    end
+
+    local ped = PlayerPedId()
+    if IsEntityDead(ped) or IsPedInAnyVehicle(ped, false) then
+        return
+    end
+
+    stopCurrentAction()
+
+    if entry.type == 'scenario' and entry.scenario then
+        TaskStartScenarioInPlace(ped, entry.scenario, 0, true)
+        return
+    end
+
+    if entry.type ~= 'anim' or not entry.dict or not entry.clip then
+        return
+    end
+
+    RequestAnimDict(entry.dict)
+    local timeoutAt = GetGameTimer() + 5000
+    while not HasAnimDictLoaded(entry.dict) do
+        if GetGameTimer() >= timeoutAt then
+            return
+        end
+        Wait(0)
+    end
+
+    TaskPlayAnim(ped, entry.dict, entry.clip, 8.0, -8.0, -1, entry.flag or 49, 0.0, false, false, false)
+end
+
+local function toggleAnimationMenu()
+    if not animationMenuEnabled then
+        return
+    end
+
+    animationMenuOpen = not animationMenuOpen
 end
 
 local function getModelConfig(entity)
@@ -285,31 +349,66 @@ AddEventHandler('onClientResourceStart', function(resourceName)
     end
 end)
 
+if animationMenuEnabled then
+    RegisterCommand(animationMenuCommand, function()
+        toggleAnimationMenu()
+    end, false)
+
+    RegisterKeyMapping(animationMenuCommand, 'AnimationMTJ2024: Animationsmenü öffnen', 'keyboard', 'F6')
+end
+
 CreateThread(function()
     while true do
         local waitTime = Config.IdleCheckInterval or 500
         local ped = PlayerPedId()
 
+        if animationMenuEnabled and IsControlJustReleased(0, animationMenuConfig.openControl or 167) then
+            toggleAnimationMenu()
+        end
+
         if not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, false) then
-            if isSitting then
+            if animationMenuOpen then
                 waitTime = 0
-                showPrompt(Config.PromptStand)
-                if IsControlJustReleased(0, Config.StandControl) then
-                    standUp()
+                showAnimationMenuPrompt()
+
+                if IsControlJustReleased(0, animationMenuConfig.upControl or 172) then
+                    animationMenuIndex = animationMenuIndex - 1
+                    if animationMenuIndex < 1 then
+                        animationMenuIndex = #animationMenuEntries
+                    end
+                elseif IsControlJustReleased(0, animationMenuConfig.downControl or 173) then
+                    animationMenuIndex = animationMenuIndex + 1
+                    if animationMenuIndex > #animationMenuEntries then
+                        animationMenuIndex = 1
+                    end
+                elseif IsControlJustReleased(0, animationMenuConfig.selectControl or 191) then
+                    playAnimationEntry(animationMenuEntries[animationMenuIndex])
+                elseif IsControlJustReleased(0, animationMenuConfig.stopControl or 73) then
+                    stopCurrentAction()
+                elseif IsControlJustReleased(0, animationMenuConfig.closeControl or 194) then
+                    animationMenuOpen = false
                 end
             else
-                local seatEntity, distance = getClosestSeat()
-                local canUseKeyboardFallback = (not Config.Target.enabled) or (not targetRegistered) or allowKeyboardFallbackWithTarget
-
-                if seatEntity and distance <= Config.InteractionDistance and canUseKeyboardFallback then
+                if isSitting then
                     waitTime = 0
-                    if Config.Target.enabled and targetRegistered then
-                        showPrompt(Config.PromptSitWithTarget or Config.PromptSit)
-                    else
-                        showPrompt(Config.PromptSit)
+                    showPrompt(Config.PromptStand)
+                    if IsControlJustReleased(0, Config.StandControl) then
+                        standUp()
                     end
-                    if IsControlJustReleased(0, Config.SitControl) then
-                        sitOnSeat(seatEntity)
+                else
+                    local seatEntity, distance = getClosestSeat()
+                    local canUseKeyboardFallback = (not Config.Target.enabled) or (not targetRegistered) or allowKeyboardFallbackWithTarget
+
+                    if seatEntity and distance <= Config.InteractionDistance and canUseKeyboardFallback then
+                        waitTime = 0
+                        if Config.Target.enabled and targetRegistered then
+                            showPrompt(Config.PromptSitWithTarget or Config.PromptSit)
+                        else
+                            showPrompt(Config.PromptSit)
+                        end
+                        if IsControlJustReleased(0, Config.SitControl) then
+                            sitOnSeat(seatEntity)
+                        end
                     end
                 end
             end

@@ -11,6 +11,25 @@ Config.PromptStand = 'Drücke ~INPUT_FRONTEND_RRIGHT~, um aufzustehen'
 Config.PromptSitWithTarget = 'Sitzen: Target-Menü nutzen oder ~INPUT_CONTEXT~ drücken'
 Config.AllowKeyboardFallbackWithTarget = true
 
+Config.AnimationMenu = {
+    enabled = true,
+    openCommand = 'animmenu',
+    openControl = 167, -- F6
+    upControl = 172, -- Arrow Up
+    downControl = 173, -- Arrow Down
+    selectControl = 191, -- Enter
+    closeControl = 194, -- Backspace
+    stopControl = 73, -- X
+    prompt = 'Animationsmenü (~INPUT_SELECT_WEAPON~): ~n~↑/↓ auswählen, ~INPUT_FRONTEND_ACCEPT~ abspielen, ~INPUT_FRONTEND_RRIGHT~ schließen, ~INPUT_VEH_DUCK~ stoppen',
+    entries = {
+        { label = 'Hände hoch', type = 'anim', dict = 'missminuteman_1ig_2', clip = 'handsup_enter', flag = 49 },
+        { label = 'Jubeln', type = 'anim', dict = 'amb@world_human_cheering@male_a', clip = 'base', flag = 49 },
+        { label = 'Salutieren', type = 'anim', dict = 'anim@mp_player_intincarsalutestd@ds@', clip = 'idle_a', flag = 49 },
+        { label = 'Rauchen', type = 'scenario', scenario = 'WORLD_HUMAN_SMOKING' },
+        { label = 'Ungeduldig', type = 'scenario', scenario = 'WORLD_HUMAN_STAND_IMPATIENT' }
+    }
+}
+
 Config.Target = {
     enabled = true,
     resource = 'ox_target',
