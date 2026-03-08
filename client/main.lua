@@ -46,10 +46,7 @@ local function isLikelyFurnitureSeat(entity)
         return false
     end
 
-    local modelName = ''
-    if hasArchetypeNameNative then
-        modelName = GetEntityArchetypeName(entity)
-    end
+    local modelName = hasArchetypeNameNative and GetEntityArchetypeName(entity) or nil
     if modelName and modelName ~= '' then
         local normalizedModelName = string.lower(modelName)
 
@@ -59,16 +56,18 @@ local function isLikelyFurnitureSeat(entity)
             end
         end
 
-        local keywordMatch = false
-        for _, keyword in ipairs(Config.GenericDetection.modelKeywords or {}) do
-            if string.find(normalizedModelName, keyword, 1, true) then
-                keywordMatch = true
-                break
+        if Config.GenericDetection.requireKeywordMatch then
+            local keywordMatch = false
+            for _, keyword in ipairs(Config.GenericDetection.modelKeywords or {}) do
+                if string.find(normalizedModelName, keyword, 1, true) then
+                    keywordMatch = true
+                    break
+                end
             end
-        end
 
-        if Config.GenericDetection.requireKeywordMatch and not keywordMatch then
-            return false
+            if not keywordMatch then
+                return false
+            end
         end
     end
 
@@ -193,9 +192,11 @@ local function getClosestSeat()
         local entityCoords = GetEntityCoords(entity)
         local distance = #(playerCoords - entityCoords)
 
-        if distance < closestDistance and distance <= Config.SearchRadius and isSeatEntity(entity) then
-            closestDistance = distance
-            closestEntity = entity
+        if distance <= Config.SearchRadius and distance < closestDistance then
+            if isSeatEntity(entity) then
+                closestDistance = distance
+                closestEntity = entity
+            end
         end
     end
 
