@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnimationMTJ2024</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- SIDE PANEL – GTA V interaction-menu style, right-docked -->
+    <div id="side-panel" class="sp-hidden">
+
+        <div id="sp-header">
+            <span id="sp-title">ANIMATIONEN</span>
+            <button id="sp-close" title="Schließen (ESC)">✕</button>
+        </div>
+
+        <div id="sp-search-bar">
+            <input id="sp-search" type="text" placeholder="Suchen …"
+                   autocomplete="off" spellcheck="false" />
+            <button id="sp-search-clear" style="display:none">✕</button>
+        </div>
+
+        <nav id="sp-cats"></nav>
+
+        <div id="sp-list-header">
+            <span id="sp-cat-title">ALLE</span>
+            <span id="sp-anim-count"></span>
+        </div>
+
+        <div id="sp-list-wrap">
+            <div id="sp-list"></div>
+            <div id="sp-empty" class="hidden">Keine Animationen gefunden</div>
+        </div>
+
+        <div id="sp-footer">
+            <button id="sp-stop">■ STOPPEN</button>
+            <span class="sp-hint">NUM 1–5  ·  ESC</span>
+        </div>
+
+    </div>
+
+    <!-- Right-click context menu -->
+    <div id="context-menu"></div>
+
+    <!-- ANIMATIONS WHEEL (unchanged) -->
+    <div id="wheel-overlay" class="hidden">
+        <div id="wheel-wrap">
+            <div id="wheel-container">
+                <svg id="wheel-svg" viewBox="0 0 500 500"
+                     xmlns="http://www.w3.org/2000/svg"></svg>
+                <div id="wheel-center">
+                    <div id="wheel-center-icon">🎭</div>
+                    <div id="wheel-center-name">Wähle<br>Kategorie</div>
+                </div>
+            </div>
+            <div id="wheel-panel" class="wheel-panel-hidden">
+                <div id="wheel-panel-header">
+                    <span id="wheel-panel-icon">🎭</span>
+                    <div>
+                        <div id="wheel-panel-title">Kategorie</div>
+                        <div id="wheel-panel-count">— Animationen</div>
+                    </div>
+                </div>
+                <div id="wheel-panel-list"></div>
+                <div id="wheel-panel-empty">
+                    <span>🖱️</span>
+                    <span>Fahre über eine Kategorie</span>
+                </div>
+            </div>
+        </div>
+        <div id="wheel-quickbar">
+            <span class="wqb-label">SCHNELLZUGRIFF</span>
+            <div id="wheel-qb-slots"></div>
+            <span class="wqb-label">NUM 1–5</span>
+        </div>
+        <div id="wheel-hint">
+            <kbd>ESC</kbd> oder Taste loslassen · Rad-Taste in FiveM-Einstellungen bindbar
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
