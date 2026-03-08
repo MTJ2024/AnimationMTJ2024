@@ -87,6 +87,16 @@ RegisterCommand('+animMenu', function()
     if menuOpen then CloseMenu() else OpenMenu() end
 end, false)
 
+-- ── Master-Stop-Taste ─────────────────────────────────────────
+-- Stoppt JEDE laufende Animation sofort – in FiveM-Einstellungen
+-- unter "AnimationMTJ2024" frei belegbar.
+RegisterKeyMapping('+animStop', 'AnimationMTJ2024 – Animation stoppen (Master Off)', 'keyboard', Config.StopKey)
+RegisterCommand('+animStop', function()
+    if not currentDict then return end
+    StopAnimation()
+    SendNUIMessage({ action = 'animStopped' })
+end, false)
+
 -- Schnellzugriff: Numpad 1–5
 for i = 1, 5 do
     RegisterKeyMapping(

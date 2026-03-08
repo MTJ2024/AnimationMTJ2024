@@ -16,6 +16,10 @@ Config.OpenKey = 'F5'
 -- Kein Standard – in FiveM-Einstellungen → Tastenbelegung → AnimationMTJ2024 setzen
 Config.WheelKey = ''
 
+-- Master-Stop-Taste: stoppt JEDE laufende Animation sofort
+-- Kein Standard – in FiveM-Einstellungen → Tastenbelegung → AnimationMTJ2024 setzen
+Config.StopKey = ''
+
 -- Menü automatisch schließen wenn der Spieler läuft (true/false)
 Config.CloseOnWalk = false
 
