@@ -10,6 +10,7 @@ local animationMenuConfig = Config.AnimationMenu or {}
 local animationMenuEnabled = animationMenuConfig.enabled == true
 local animationMenuEntries = animationMenuConfig.entries or {}
 local animationMenuCommand = animationMenuConfig.openCommand or 'animmenu'
+local animationMenuKeyMapping = animationMenuConfig.openKeyMapping or 'F6'
 
 local function showPrompt(text)
     BeginTextCommandDisplayHelp('STRING')
@@ -24,7 +25,7 @@ end
 
 local function showAnimationMenuPrompt()
     if #animationMenuEntries == 0 then
-        showPrompt('Animationsmenü: keine Einträge konfiguriert')
+        showPrompt(animationMenuConfig.noEntriesPrompt or 'Animationsmenü: keine Einträge konfiguriert')
         return
     end
 
@@ -354,7 +355,7 @@ if animationMenuEnabled then
         toggleAnimationMenu()
     end, false)
 
-    RegisterKeyMapping(animationMenuCommand, 'AnimationMTJ2024: Animationsmenü öffnen', 'keyboard', 'F6')
+    RegisterKeyMapping(animationMenuCommand, 'AnimationMTJ2024: Animationsmenü öffnen', 'keyboard', animationMenuKeyMapping)
 end
 
 CreateThread(function()
@@ -362,26 +363,23 @@ CreateThread(function()
         local waitTime = Config.IdleCheckInterval or 500
         local ped = PlayerPedId()
 
-        if animationMenuEnabled and IsControlJustReleased(0, animationMenuConfig.openControl or 167) then
-            toggleAnimationMenu()
-        end
-
         if not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, false) then
             if animationMenuOpen then
                 waitTime = 0
                 showAnimationMenuPrompt()
+                local hasAnimationEntries = #animationMenuEntries > 0
 
-                if IsControlJustReleased(0, animationMenuConfig.upControl or 172) then
+                if hasAnimationEntries and IsControlJustReleased(0, animationMenuConfig.upControl or 172) then
                     animationMenuIndex = animationMenuIndex - 1
                     if animationMenuIndex < 1 then
                         animationMenuIndex = #animationMenuEntries
                     end
-                elseif IsControlJustReleased(0, animationMenuConfig.downControl or 173) then
+                elseif hasAnimationEntries and IsControlJustReleased(0, animationMenuConfig.downControl or 173) then
                     animationMenuIndex = animationMenuIndex + 1
                     if animationMenuIndex > #animationMenuEntries then
                         animationMenuIndex = 1
                     end
-                elseif IsControlJustReleased(0, animationMenuConfig.selectControl or 191) then
+                elseif hasAnimationEntries and IsControlJustReleased(0, animationMenuConfig.selectControl or 191) then
                     playAnimationEntry(animationMenuEntries[animationMenuIndex])
                 elseif IsControlJustReleased(0, animationMenuConfig.stopControl or 73) then
                     stopCurrentAction()
