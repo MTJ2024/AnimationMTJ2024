@@ -160,9 +160,9 @@ local function getClosestSeat()
     end
 
     local objects = GetGamePool('CObject')
-    local processed = 0
+    local maxObjects = math.min(#objects, Config.MaxScanObjects)
 
-    for i = 1, #objects do
+    for i = 1, maxObjects do
         local entity = objects[i]
         local entityCoords = GetEntityCoords(entity)
         local distance = #(playerCoords - entityCoords)
@@ -172,10 +172,6 @@ local function getClosestSeat()
             closestEntity = entity
         end
 
-        processed = processed + 1
-        if processed >= Config.MaxScanObjects then
-            break
-        end
     end
 
     lastGenericSeat = closestEntity
@@ -194,6 +190,10 @@ CreateThread(function()
 
     while GetResourceState(Config.Target.resource) ~= 'started' do
         if GetGameTimer() - waitStartedAt > waitTimeoutMs then
+            print(('[AnimationMTJ2024] %s konnte innerhalb von %dms nicht gestartet werden. Nutze Tastatur-Fallback.'):format(
+                Config.Target.resource,
+                waitTimeoutMs
+            ))
             return
         end
         Wait(1000)
