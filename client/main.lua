@@ -3,6 +3,7 @@ local lastGenericSeat
 local lastGenericScanAt = 0
 local targetRegistered = false
 local hasArchetypeNameNative = type(GetEntityArchetypeName) == 'function'
+local allowKeyboardFallbackWithTarget = Config.AllowKeyboardFallbackWithTarget
 
 local function showPrompt(text)
     BeginTextCommandDisplayHelp('STRING')
@@ -298,7 +299,7 @@ CreateThread(function()
                 end
             else
                 local seatEntity, distance = getClosestSeat()
-                local canUseKeyboardFallback = (not Config.Target.enabled) or (not targetRegistered) or Config.AllowKeyboardFallbackWithTarget
+                local canUseKeyboardFallback = (not Config.Target.enabled) or (not targetRegistered) or allowKeyboardFallbackWithTarget
 
                 if seatEntity and distance <= Config.InteractionDistance and canUseKeyboardFallback then
                     waitTime = 0
