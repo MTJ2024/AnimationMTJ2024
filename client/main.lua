@@ -3,8 +3,6 @@
 --   Unauthorized redistribution is strictly prohibited.
 -- ============================================================
 
-local ESX = exports['es_extended']:getSharedObject()
-
 -- ── Kopierschutz ────────────────────────────────────────────
 if GetCurrentResourceName() ~= Config.ResourceName then
     print('^1[AnimationMTJ2024] WARNUNG: Ressourcenname wurde geändert!')
@@ -24,30 +22,36 @@ for i = 1, 5 do
 end
 
 -- ── Animation abspielen ──────────────────────────────────────
+-- WICHTIG: RequestAnimDict + Wait müssen in einem eigenen
+-- CreateThread laufen – NUI-Callbacks sind keine Coroutinen.
 local function PlayAnimation(dict, anim, flag)
     if not dict or not anim then return end
 
-    local ped = PlayerPedId()
+    CreateThread(function()
+        local ped = PlayerPedId()
 
-    -- Laufende Animation stoppen
-    if currentDict then
-        ClearPedTasks(ped)
-        currentDict = nil
-        currentAnim = nil
-    end
+        -- Laufende Animation stoppen
+        if currentDict then
+            ClearPedTasks(ped)
+            currentDict = nil
+            currentAnim = nil
+        end
 
-    RequestAnimDict(dict)
-    local timeout = 0
-    while not HasAnimDictLoaded(dict) and timeout < 100 do
-        Wait(10)
-        timeout = timeout + 1
-    end
+        RequestAnimDict(dict)
+        local timeout = 0
+        while not HasAnimDictLoaded(dict) and timeout < 200 do
+            Wait(10)
+            timeout = timeout + 1
+        end
 
-    if HasAnimDictLoaded(dict) then
-        TaskPlayAnim(ped, dict, anim, 8.0, -8.0, -1, flag or 1, 0, false, false, false)
-        currentDict = dict
-        currentAnim = anim
-    end
+        if HasAnimDictLoaded(dict) then
+            TaskPlayAnim(ped, dict, anim, 8.0, -8.0, -1, flag or 1, 0, false, false, false)
+            currentDict = dict
+            currentAnim = anim
+        else
+            print('^1[AnimationMTJ2024] Dict nicht geladen: ' .. tostring(dict) .. '^0')
+        end
+    end)
 end
 
 -- ── Animation stoppen ────────────────────────────────────────

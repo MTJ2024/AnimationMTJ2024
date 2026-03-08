@@ -13,7 +13,6 @@ version     '1.0.0'
 lua54 'yes'
 
 shared_scripts {
-    '@es_extended/imports.lua',
     'config.lua',
 }
 
