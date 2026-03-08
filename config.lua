@@ -196,7 +196,7 @@ Config.Animations = {
     -- ── 🍹 Bar & Feiern (10) ───────────────────────────────────
     --  FIX: removed Casino DLC-only anims + move_m@drunk (movement dict, no idle_a)
     {
-        id = 'casino', label = '🍹 Bar & Feiern',
+        id = 'bar', label = '🍹 Bar & Feiern',
         anims = {
             { label='Trinken A',      dict='amb@world_human_drinking@male@idle_a',             anim='idle_a', flag=1 },
             { label='Feiern A',       dict='amb@world_human_partying@male_a@base',             anim='base',   flag=1 },

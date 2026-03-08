@@ -9,15 +9,15 @@
 /* ── Tokens ──────────────────────────────────────────────────── */
 :root {
     /* GTA V Online exact palette */
-    --amber:      #e4a800;
-    --amber-dark: #b38200;
+    --amber:      #e8a800;   /* GTA V golden amber – matches original palette */
+    --amber-dark: #b48000;
     --bg:         rgba(0, 0, 0, 0.92);
     --bg-header:  rgba(0, 0, 0, 0.98);
     --bg-hover:   rgba(255, 255, 255, 0.06);
     --red:        #cc2222;
 
     /* Inverted selection (the GTA V look) */
-    --sel-bg:   #e4a800;   /* amber fill */
+    --sel-bg:   #e8a800;   /* amber fill – matches --amber exactly */
     --sel-fg:   #000000;   /* black text */
 
     --t1:  #ffffff;
@@ -217,6 +217,7 @@ button { font-family: var(--font); cursor: pointer; border: none; outline: none;
 .sp-row:hover .sp-row-label  { color: var(--t1); }
 /* Playing row: black text on amber background */
 .sp-row.playing .sp-row-label { font-weight: 700; color: var(--sel-fg); }
+/* brightness(0) converts any emoji/icon colour to solid black on the amber bg */
 .sp-row.playing .sp-row-icon  { opacity: 1; filter: brightness(0); }
 
 /* Pulse dot – dark on amber background */
