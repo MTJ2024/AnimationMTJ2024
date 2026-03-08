@@ -8,6 +8,8 @@ Config.StandControl = 194 -- BACKSPACE
 
 Config.PromptSit = 'Drücke ~INPUT_CONTEXT~, um dich hinzusetzen'
 Config.PromptStand = 'Drücke ~INPUT_FRONTEND_RRIGHT~, um aufzustehen'
+Config.PromptSitWithTarget = 'Sitzen: Target-Menü nutzen oder ~INPUT_CONTEXT~ drücken'
+Config.AllowKeyboardFallbackWithTarget = true
 
 Config.Target = {
     enabled = true,

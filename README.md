@@ -20,3 +20,9 @@ ensure AnimationMTJ2024
   - Interaktionsdistanz
   - Tasten für Sitzen/Aufstehen
   - Optionales `ox_target`-Targeting (Fallback auf Taste in der Nähe)
+
+## Nutzung im Spiel
+
+- **Mit ox_target**: Öffne das Target-Menü (Third Eye, meist `ALT`) auf dem Stuhl/Sofa/Bank und wähle **Sitzen**.
+- **Tastatur-Fallback (immer aktiv)**: Stelle dich nahe an ein erkennbares Möbelstück und drücke **E**.
+- **Aufstehen**: **BACKSPACE**.

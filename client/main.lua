@@ -296,11 +296,17 @@ CreateThread(function()
                 if IsControlJustReleased(0, Config.StandControl) then
                     standUp()
                 end
-            elseif not Config.Target.enabled or not targetRegistered then
+            else
                 local seatEntity, distance = getClosestSeat()
-                if seatEntity and distance <= Config.InteractionDistance then
+                local canUseKeyboardFallback = (not Config.Target.enabled) or (not targetRegistered) or Config.AllowKeyboardFallbackWithTarget
+
+                if seatEntity and distance <= Config.InteractionDistance and canUseKeyboardFallback then
                     waitTime = 0
-                    showPrompt(Config.PromptSit)
+                    if Config.Target.enabled and targetRegistered then
+                        showPrompt(Config.PromptSitWithTarget or Config.PromptSit)
+                    else
+                        showPrompt(Config.PromptSit)
+                    end
                     if IsControlJustReleased(0, Config.SitControl) then
                         sitOnSeat(seatEntity)
                     end
