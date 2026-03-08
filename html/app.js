@@ -71,7 +71,7 @@ window.addEventListener('message', ({ data }) => {
                 if (k) k.textContent = data.openKey;
             }
             renderQuickbar();
-            el.quickbar.classList.remove('hidden');
+            // Quickbar-HUD wird nie eingeblendet – nur Zustand intern speichern
             break;
 
         case 'animPlaying':
@@ -365,7 +365,7 @@ function assignToQuickbar(index) {
 
     state.quickbar[index] = { label: anim.label, dict: anim.dict, anim: anim.anim, flag: anim.flag ?? 1 };
     renderQuickbar();
-    el.quickbar.classList.remove('hidden');
+    // Quickbar-HUD bleibt immer versteckt
 
     nuiFetch('setQuickbar', { slot: index + 1, label: anim.label, dict: anim.dict, anim: anim.anim, flag: anim.flag ?? 1 });
     hideCtxMenu();

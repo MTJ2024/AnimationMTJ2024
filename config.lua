@@ -23,8 +23,8 @@ Config.StopKey = ''
 -- Menü automatisch schließen wenn der Spieler läuft (true/false)
 Config.CloseOnWalk = false
 
--- Schnellzugriff-Leiste anzeigen
-Config.EnableQuickbar = true
+-- Schnellzugriff-Leiste anzeigen (deaktiviert – Leiste nie auf dem Bildschirm)
+Config.EnableQuickbar = false
 
 -- ============================================================
 --   SCHNELLZUGRIFF  –  5 vorkonfigurierte Animations-Slots
