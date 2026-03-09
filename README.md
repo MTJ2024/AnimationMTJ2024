@@ -5,7 +5,7 @@ FiveM-Ressource für Sitz-Interaktion (Stühle, Sofas, Bänke) und ein einfaches
 ## Installation
 
 1. Ordner in deinen `resources`-Pfad legen.
-2. In `server.cfg` eintragen:
+2. Optional in `server.cfg` eintragen:
 
 ```cfg
 ensure ox_target
@@ -23,7 +23,8 @@ ensure AnimationMTJ2024
 
 ## Nutzung im Spiel
 
-- **Mit ox_target (Pflicht)**: Öffne das Target-Menü (Third Eye, meist `ALT`) auf dem Stuhl/Sofa/Bank und wähle **Sitzen**.
+- **Mit ox_target (optional)**: Öffne das Target-Menü (Third Eye, meist `ALT`) auf dem Stuhl/Sofa/Bank und wähle **Sitzen**.
+- Wenn `ox_target` nicht läuft, startet die Ressource trotzdem und das normale Animationsmenü (`F6` / `/animmenu`) bleibt nutzbar.
 - **Aufstehen**: **BACKSPACE**.
 - **Normales Animationsmenü**: Drücke **F6** oder nutze den Command **/animmenu**.
 - **Menü-Steuerung**: Pfeil hoch/runter auswählen, **ENTER** abspielen, **X** stoppen, **BACKSPACE** schließen.

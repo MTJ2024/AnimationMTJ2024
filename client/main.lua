@@ -251,10 +251,18 @@ local function registerTargetOptions()
         }
     }
 
-    exports[Config.Target.resource]:addModel(modelNames, targetOptions)
+    local ok, err = pcall(function()
+        exports[Config.Target.resource]:addModel(modelNames, targetOptions)
+    end)
+
+    if not ok then
+        print(('[AnimationMTJ2024] Fehler beim Registrieren von addModel in %s: %s'):format(Config.Target.resource, tostring(err)))
+        return false
+    end
 
     if Config.Target.useGlobalObject then
-        exports[Config.Target.resource]:addGlobalObject({
+        ok, err = pcall(function()
+            exports[Config.Target.resource]:addGlobalObject({
             {
                 name = 'animationmtj2024_sit_generic',
                 icon = 'fas fa-chair',
@@ -268,6 +276,12 @@ local function registerTargetOptions()
                 end
             }
         })
+        end)
+
+        if not ok then
+            print(('[AnimationMTJ2024] Fehler beim Registrieren von addGlobalObject in %s: %s'):format(Config.Target.resource, tostring(err)))
+            return false
+        end
     end
 
     targetRegistered = true
