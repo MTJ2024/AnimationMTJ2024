@@ -29,6 +29,14 @@ ensure AnimationMTJ2024
 - **Normales Animationsmenü**: Drücke **F6** oder nutze den Command **/animmenu**.
 - **Menü-Steuerung**: Pfeil hoch/runter auswählen, **ENTER** abspielen, **X** stoppen, **BACKSPACE** schließen.
 
+## Troubleshooting / Verifikation
+
+- Prüfe im Server-Log den Stand:
+  - `ensure AnimationMTJ2024`
+  - `ensure ox_target` (optional)
+- Wenn `ox_target` fehlt oder verspätet startet, sollte **/animmenu** trotzdem funktionieren.
+- Ein Mumble-Log wie `MUMBLE_ADD_VOICE_CHANNEL_LISTEN` stammt nicht aus dieser Ressource.
+
 ### Custom Sitzobjekte
 
 Füge eigene Modelle in `Config.SeatModels` ein:

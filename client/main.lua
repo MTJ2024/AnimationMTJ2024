@@ -256,7 +256,7 @@ local function registerTargetOptions()
     end)
 
     if not ok then
-        print(('[AnimationMTJ2024] Fehler beim Registrieren von addModel in %s: %s'):format(Config.Target.resource, tostring(err)))
+        print(('[AnimationMTJ2024] Failed to register addModel in %s: %s'):format(Config.Target.resource, tostring(err)))
         return false
     end
 
@@ -279,7 +279,7 @@ local function registerTargetOptions()
         end)
 
         if not ok then
-            print(('[AnimationMTJ2024] Fehler beim Registrieren von addGlobalObject in %s: %s'):format(Config.Target.resource, tostring(err)))
+            print(('[AnimationMTJ2024] Failed to register addGlobalObject in %s: %s'):format(Config.Target.resource, tostring(err)))
             return false
         end
     end
