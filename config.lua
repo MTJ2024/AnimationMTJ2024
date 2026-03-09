@@ -3,13 +3,10 @@ Config = {}
 Config.InteractionDistance = 2.2
 Config.SearchRadius = 5.0
 Config.IdleCheckInterval = 500
-Config.SitControl = 38 -- E
 Config.StandControl = 194 -- BACKSPACE
 
-Config.PromptSit = 'Drücke ~INPUT_CONTEXT~, um dich hinzusetzen'
 Config.PromptStand = 'Drücke ~INPUT_FRONTEND_RRIGHT~, um aufzustehen'
-Config.PromptSitWithTarget = 'Sitzen: Target-Menü nutzen oder ~INPUT_CONTEXT~ drücken'
-Config.AllowKeyboardFallbackWithTarget = true
+Config.AllowKeyboardFallbackWithTarget = false
 
 Config.AnimationMenu = {
     enabled = true,
@@ -48,16 +45,15 @@ Config.GenericDetection = {
     minWidth = 0.20,
     minDepth = 0.20,
     minHeight = 0.30,
-    maxWidth = 4.5,
-    maxDepth = 4.5,
-    maxHeight = 2.2,
-    requireKeywordMatch = false,
+    maxWidth = 3.5,
+    maxDepth = 3.5,
+    maxHeight = 2.0,
+    requireKeywordMatch = true,
     modelKeywords = {
-        'chair', 'seat', 'sofa', 'couch', 'bench', 'stool', 'armchair', 'officechair', 'barchair',
-        'table', 'desk', 'furn', 'furniture'
+        'chair', 'seat', 'sofa', 'couch', 'bench', 'stool', 'armchair', 'officechair', 'barchair', 'ottoman'
     },
     blacklistKeywords = {
-        'door', 'gate', 'window', 'wall', 'fence', 'sign', 'lamp', 'light', 'bin', 'trash'
+        'door', 'gate', 'window', 'wall', 'fence', 'sign', 'lamp', 'light', 'bin', 'trash', 'table', 'desk'
     }
 }
 
@@ -126,16 +122,6 @@ Config.SeatModels = {
     ['prop_bench_15'] = { zOffset = 0.42, headingOffset = 180.0, scenario = 'PROP_HUMAN_SEAT_BENCH' },
     ['prop_bench_16'] = { zOffset = 0.42, headingOffset = 180.0, scenario = 'PROP_HUMAN_SEAT_BENCH' },
 
-    -- Tables / furniture fallback (for broad furniture recognition requests)
-    ['prop_table_01'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_table_02'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_table_03'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_table_04'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_table_05'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_table_06'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_table_08'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_table_tennis'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_rub_table_01'] = { zOffset = 0.35, headingOffset = 180.0 },
-    ['prop_desk_01'] = { zOffset = 0.40, headingOffset = 180.0 },
-    ['prop_desk_02'] = { zOffset = 0.40, headingOffset = 180.0 }
+    -- Custom seats (examples, add your own object models here)
+    -- ['my_custom_chair_prop'] = { zOffset = 0.45, headingOffset = 180.0, xOffset = 0.0, yOffset = 0.0, scenario = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER' }
 }

@@ -15,16 +15,29 @@ ensure AnimationMTJ2024
 ## Konfiguration
 
 - `config.lua` enthält:
-  - stark erweiterte Sitzmodelle (Stuhl/Sofa/Bank/Tisch-nahe Möbel)
-  - generische Möbel-Erkennung über Modellgröße + Modellnamen-Schlüsselwörter
-  - Interaktionsdistanz
-  - Tasten für Sitzen/Aufstehen
-  - Optionales `ox_target`-Targeting (Fallback auf Taste in der Nähe)
+  - Sitz-Optionen ausschließlich über `ox_target`
+  - stark erweiterte Sitzmodelle (Stuhl/Sofa/Bank)
+  - generische Sitz-Erkennung über Modellgröße + Modellnamen-Schlüsselwörter (ohne Tisch/Desk)
+  - `xOffset` / `yOffset` pro Modell für Custom-Sitzobjekte
+  - Taste zum Aufstehen und normales Animationsmenü
 
 ## Nutzung im Spiel
 
-- **Mit ox_target**: Öffne das Target-Menü (Third Eye, meist `ALT`) auf dem Stuhl/Sofa/Bank und wähle **Sitzen**.
-- **Tastatur-Fallback (immer aktiv)**: Stelle dich nahe an ein erkennbares Möbelstück und drücke **E**.
+- **Mit ox_target (Pflicht)**: Öffne das Target-Menü (Third Eye, meist `ALT`) auf dem Stuhl/Sofa/Bank und wähle **Sitzen**.
 - **Aufstehen**: **BACKSPACE**.
 - **Normales Animationsmenü**: Drücke **F6** oder nutze den Command **/animmenu**.
 - **Menü-Steuerung**: Pfeil hoch/runter auswählen, **ENTER** abspielen, **X** stoppen, **BACKSPACE** schließen.
+
+### Custom Sitzobjekte
+
+Füge eigene Modelle in `Config.SeatModels` ein:
+
+```lua
+['my_custom_chair_prop'] = {
+  zOffset = 0.45,
+  headingOffset = 180.0,
+  xOffset = 0.0,
+  yOffset = 0.0,
+  scenario = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER'
+}
+```

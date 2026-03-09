@@ -1,9 +1,6 @@
 local isSitting = false
-local lastGenericSeat
-local lastGenericScanAt = 0
 local targetRegistered = false
 local hasArchetypeNameNative = type(GetEntityArchetypeName) == 'function'
-local allowKeyboardFallbackWithTarget = Config.AllowKeyboardFallbackWithTarget
 local animationMenuOpen = false
 local animationMenuIndex = 1
 local animationMenuConfig = Config.AnimationMenu or {}
@@ -158,12 +155,23 @@ local function resolveSeatData(entity)
     local headingOffset = Config.DefaultHeadingOffset
     local scenario = Config.DefaultScenario
 
+    local xOffset = 0.0
+    local yOffset = 0.0
+
     if seatConfig then
         zOffset = seatConfig.zOffset or zOffset
         headingOffset = seatConfig.headingOffset or headingOffset
         scenario = seatConfig.scenario or scenario
+        xOffset = seatConfig.xOffset or xOffset
+        yOffset = seatConfig.yOffset or yOffset
     else
         zOffset = math.max(0.30, math.min(0.60, math.abs(maxDim.z) * 0.6))
+        yOffset = -math.min(0.20, math.abs(maxDim.y) * 0.12)
+    end
+
+    local seatCoords = GetOffsetFromEntityInWorldCoords(entity, xOffset, yOffset, 0.0)
+    if seatCoords then
+        entityCoords = seatCoords
     end
 
     return entityCoords, entityHeading, zOffset, headingOffset, scenario
@@ -209,67 +217,6 @@ local function standUp()
 
     ClearPedTasks(PlayerPedId())
     isSitting = false
-end
-
-local function getClosestSeat()
-    local ped = PlayerPedId()
-    local playerCoords = GetEntityCoords(ped)
-    local closestEntity
-    local closestDistance = Config.SearchRadius
-
-    for modelName in pairs(Config.SeatModels) do
-        local entity = GetClosestObjectOfType(
-            playerCoords.x,
-            playerCoords.y,
-            playerCoords.z,
-            Config.SearchRadius,
-            joaat(modelName),
-            false,
-            false,
-            false
-        )
-
-        if entity ~= 0 then
-            local entityCoords = GetEntityCoords(entity)
-            local distance = #(playerCoords - entityCoords)
-            if distance < closestDistance and isSeatEntity(entity) then
-                closestDistance = distance
-                closestEntity = entity
-            end
-        end
-    end
-
-    if closestEntity then
-        return closestEntity, closestDistance
-    end
-
-    local now = GetGameTimer()
-    local genericScanInterval = Config.GenericDetection.scanIntervalMs or 1000
-    if lastGenericSeat and now - lastGenericScanAt < genericScanInterval and DoesEntityExist(lastGenericSeat) then
-        local cachedDistance = #(playerCoords - GetEntityCoords(lastGenericSeat))
-        if cachedDistance < closestDistance and isSeatEntity(lastGenericSeat) then
-            return lastGenericSeat, cachedDistance
-        end
-    end
-
-    local objects = GetGamePool('CObject')
-    for i = 1, #objects do
-        local entity = objects[i]
-        local entityCoords = GetEntityCoords(entity)
-        local distance = #(playerCoords - entityCoords)
-
-        if distance <= Config.SearchRadius and distance < closestDistance then
-            if isSeatEntity(entity) then
-                closestDistance = distance
-                closestEntity = entity
-            end
-        end
-    end
-
-    lastGenericSeat = closestEntity
-    lastGenericScanAt = now
-
-    return closestEntity, closestDistance
 end
 
 local function registerTargetOptions()
@@ -334,7 +281,7 @@ CreateThread(function()
 
     while not registerTargetOptions() do
         if GetGameTimer() - waitStartedAt > waitTimeoutMs then
-            print(('[AnimationMTJ2024] %s konnte innerhalb von %dms nicht gestartet werden. Nutze Tastatur-Fallback; spätere Starts werden weiter verarbeitet.'):format(
+            print(('[AnimationMTJ2024] %s konnte innerhalb von %dms nicht gestartet werden. Ox-Target-Sitzmenü wird beim späteren Start automatisch registriert.'):format(
                 Config.Target.resource,
                 waitTimeoutMs
             ))
@@ -392,21 +339,6 @@ CreateThread(function()
                     showPrompt(Config.PromptStand)
                     if IsControlJustReleased(0, Config.StandControl) then
                         standUp()
-                    end
-                else
-                    local seatEntity, distance = getClosestSeat()
-                    local canUseKeyboardFallback = (not Config.Target.enabled) or (not targetRegistered) or allowKeyboardFallbackWithTarget
-
-                    if seatEntity and distance <= Config.InteractionDistance and canUseKeyboardFallback then
-                        waitTime = 0
-                        if Config.Target.enabled and targetRegistered then
-                            showPrompt(Config.PromptSitWithTarget or Config.PromptSit)
-                        else
-                            showPrompt(Config.PromptSit)
-                        end
-                        if IsControlJustReleased(0, Config.SitControl) then
-                            sitOnSeat(seatEntity)
-                        end
                     end
                 end
             end
