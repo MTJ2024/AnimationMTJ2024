@@ -34,10 +34,10 @@ Füge eigene Modelle in `Config.SeatModels` ein:
 
 ```lua
 ['my_custom_chair_prop'] = {
-  zOffset = 0.45,
-  headingOffset = 180.0,
-  xOffset = 0.0,
-  yOffset = 0.0,
+  zOffset = 0.45,         -- Höhe auf dem Objekt
+  headingOffset = 180.0,  -- Blickrichtung beim Sitzen
+  xOffset = 0.0,          -- Links/Rechts relativ zum Modellmittelpunkt
+  yOffset = 0.0,          -- Vor/Zurück relativ zum Modellmittelpunkt
   scenario = 'PROP_HUMAN_SEAT_CHAIR_MP_PLAYER'
 }
 ```

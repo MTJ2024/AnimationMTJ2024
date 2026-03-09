@@ -6,7 +6,6 @@ Config.IdleCheckInterval = 500
 Config.StandControl = 194 -- BACKSPACE
 
 Config.PromptStand = 'Drücke ~INPUT_FRONTEND_RRIGHT~, um aufzustehen'
-Config.AllowKeyboardFallbackWithTarget = false
 
 Config.AnimationMenu = {
     enabled = true,

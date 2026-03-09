@@ -8,6 +8,8 @@ local animationMenuEnabled = animationMenuConfig.enabled == true
 local animationMenuEntries = animationMenuConfig.entries or {}
 local animationMenuCommand = animationMenuConfig.openCommand or 'animmenu'
 local animationMenuKeyMapping = animationMenuConfig.openKeyMapping or 'F6'
+local GENERIC_SEAT_MAX_Y_OFFSET = 0.20
+local GENERIC_SEAT_Y_OFFSET_MULTIPLIER = 0.12
 
 local function showPrompt(text)
     BeginTextCommandDisplayHelp('STRING')
@@ -158,6 +160,10 @@ local function resolveSeatData(entity)
     local xOffset = 0.0
     local yOffset = 0.0
 
+    local function calculateGenericSeatYOffset(maxBounds)
+        return -math.min(GENERIC_SEAT_MAX_Y_OFFSET, math.abs(maxBounds.y) * GENERIC_SEAT_Y_OFFSET_MULTIPLIER)
+    end
+
     if seatConfig then
         zOffset = seatConfig.zOffset or zOffset
         headingOffset = seatConfig.headingOffset or headingOffset
@@ -166,13 +172,10 @@ local function resolveSeatData(entity)
         yOffset = seatConfig.yOffset or yOffset
     else
         zOffset = math.max(0.30, math.min(0.60, math.abs(maxDim.z) * 0.6))
-        yOffset = -math.min(0.20, math.abs(maxDim.y) * 0.12)
+        yOffset = calculateGenericSeatYOffset(maxDim)
     end
 
-    local seatCoords = GetOffsetFromEntityInWorldCoords(entity, xOffset, yOffset, 0.0)
-    if seatCoords then
-        entityCoords = seatCoords
-    end
+    entityCoords = GetOffsetFromEntityInWorldCoords(entity, xOffset, yOffset, 0.0)
 
     return entityCoords, entityHeading, zOffset, headingOffset, scenario
 end
