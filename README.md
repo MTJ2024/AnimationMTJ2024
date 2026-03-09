@@ -35,7 +35,7 @@ ensure AnimationMTJ2024
   - `ensure AnimationMTJ2024`
   - `ensure ox_target` (optional)
 - Wenn `ox_target` fehlt oder verspätet startet, sollte **/animmenu** trotzdem funktionieren.
-- Ein Mumble-Log wie `MUMBLE_ADD_VOICE_CHANNEL_LISTEN` stammt nicht aus dieser Ressource.
+- Ein Mumble-Log wie `MUMBLE_ADD_VOICE_CHANNEL_LISTEN` stammt nicht aus dieser Ressource. In diesem Fall Voice-/Radio-Resource prüfen; diese Meldung kann hier ignoriert werden, wenn `/animmenu` und Sitzen normal funktionieren.
 
 ### Custom Sitzobjekte
 
