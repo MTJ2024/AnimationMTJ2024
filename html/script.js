@@ -25,8 +25,18 @@
 
     function renderEntries() {
         entriesEl.innerHTML = '';
+        var lastCategory = null;
         for (var i = 0; i < entries.length; i++) {
             var entry = entries[i];
+
+            if (entry.category && entry.category !== lastCategory) {
+                lastCategory = entry.category;
+                var catEl = document.createElement('div');
+                catEl.className = 'menu-category';
+                catEl.textContent = entry.category;
+                entriesEl.appendChild(catEl);
+            }
+
             var el = document.createElement('div');
             el.className = 'menu-entry' + (i === currentIndex ? ' active' : '');
             el.setAttribute('data-index', i);
