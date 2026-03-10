@@ -1,11 +1,13 @@
 # AnimationMTJ2024
 
-FiveM-Ressource für Sitz-Interaktion (Stühle, Sofas, Bänke) und ein einfaches normales Animationsmenü.
+FiveM-Ressource für Sitz-Interaktion (Stühle, Sofas, Bänke) und ein NUI-basiertes Animationsmenü.
+
+![Animationsmenü](https://github.com/user-attachments/assets/3b914dd0-636b-4c19-9b27-71d45a778a36)
 
 ## Installation
 
 1. Ordner in deinen `resources`-Pfad legen.
-2. Optional in `server.cfg` eintragen:
+2. In `server.cfg` eintragen:
 
 ```cfg
 ensure ox_target
@@ -15,19 +17,24 @@ ensure AnimationMTJ2024
 ## Konfiguration
 
 - `config.lua` enthält:
-  - Sitz-Optionen ausschließlich über `ox_target`
+  - Sitz-Optionen über `ox_target` (optional)
   - stark erweiterte Sitzmodelle (Stuhl/Sofa/Bank)
   - generische Sitz-Erkennung über Modellgröße + Modellnamen-Schlüsselwörter (ohne Tisch/Desk)
   - `xOffset` / `yOffset` pro Modell für Custom-Sitzobjekte
-  - Taste zum Aufstehen und normales Animationsmenü
+  - Taste zum Aufstehen und NUI-Animationsmenü
 
 ## Nutzung im Spiel
 
 - **Mit ox_target (optional)**: Öffne das Target-Menü (Third Eye, meist `ALT`) auf dem Stuhl/Sofa/Bank und wähle **Sitzen**.
-- Wenn `ox_target` nicht läuft, startet die Ressource trotzdem und das normale Animationsmenü (`F6` / `/animmenu`) bleibt nutzbar.
+- Wenn `ox_target` nicht läuft, startet die Ressource trotzdem und das Animationsmenü (`F6` / `/animmenu`) bleibt nutzbar.
 - **Aufstehen**: **BACKSPACE**.
-- **Normales Animationsmenü**: Drücke **F6** oder nutze den Command **/animmenu**.
-- **Menü-Steuerung**: Pfeil hoch/runter auswählen, **ENTER** abspielen, **X** stoppen, **BACKSPACE** schließen.
+- **Animationsmenü**: Drücke **F6** oder nutze den Command **/animmenu**.
+- **Menü-Steuerung** (Tastatur oder Maus):
+  - **↑ / ↓** oder Mausklick: Animation auswählen
+  - **Enter** oder Abspielen-Button: Animation abspielen
+  - **X** oder Stopp-Button: Animation stoppen
+  - **Esc** oder ✕-Button: Menü schließen
+  - **Doppelklick** auf einen Eintrag: sofort abspielen
 
 ## Troubleshooting / Verifikation
 
