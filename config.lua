@@ -62,10 +62,10 @@ Config.AnimationMenu = {
         { label = 'Aufgeben / Ergeben', type = 'anim', category = 'Aktionen', dict = 'random@mugging3', clip = 'handsup_standing_base', flag = 49 },
         { label = 'Warten', type = 'anim', category = 'Aktionen', dict = 'amb@world_human_hang_out_street@male_b@idle_a', clip = 'idle_a', flag = 49 },
         { label = 'Umschauen', type = 'anim', category = 'Aktionen', dict = 'amb@world_human_security_shine_torch@male@idle_a', clip = 'idle_a', flag = 49 },
-        { label = 'Schlafen', type = 'anim', category = 'Aktionen', dict = 'misslamar1dead_body', clip = 'yourChoice', flag = 1 },
+        { label = 'Schlafen', type = 'anim', category = 'Aktionen', dict = 'misslamar1dead_body', clip = 'dead_idle', flag = 1 },
         { label = 'Humpeln', type = 'anim', category = 'Aktionen', dict = 'move_injured_ground', clip = 'front_loop', flag = 49 },
         { label = 'Krabbeln', type = 'anim', category = 'Aktionen', dict = 'move_crawl', clip = 'onfront_fwd', flag = 49 },
-        { label = 'Hinkauern', type = 'anim', category = 'Aktionen', dict = 'timetable@gardener@smoking_joint', clip = 'idle_cough', flag = 49 },
+        { label = 'Hinkauern', type = 'anim', category = 'Aktionen', dict = 'amb@world_human_bum_wash@male@low@idle_a', clip = 'idle_a', flag = 49 },
 
         -- ==============================
         -- TANZ
@@ -88,7 +88,7 @@ Config.AnimationMenu = {
         { label = 'Kaffee trinken', type = 'anim', category = 'Sozial & Alltag', dict = 'amb@world_human_drinking@coffee@male@idle_a', clip = 'idle_a', flag = 49 },
         { label = 'Essen', type = 'anim', category = 'Sozial & Alltag', dict = 'mp_player_inteat@burger', clip = 'mp_player_int_eat_burger', flag = 49 },
         { label = 'Rauchen (Anim)', type = 'anim', category = 'Sozial & Alltag', dict = 'amb@world_human_smoking@male@male_a@enter', clip = 'enter', flag = 49 },
-        { label = 'Joint rauchen', type = 'anim', category = 'Sozial & Alltag', dict = 'anim@safehouse@yourChoice_male', clip = 'yourChoice_base', flag = 49 },
+        { label = 'Joint rauchen', type = 'anim', category = 'Sozial & Alltag', dict = 'timetable@gardener@smoking_joint', clip = 'idle_cough', flag = 49 },
         { label = 'Karte lesen', type = 'anim', category = 'Sozial & Alltag', dict = 'missheistdockssetup1clipboard@base', clip = 'base', flag = 49 },
         { label = 'Foto machen', type = 'anim', category = 'Sozial & Alltag', dict = 'amb@world_human_paparazzi@male@base', clip = 'base', flag = 49 },
         { label = 'Binokel benutzen', type = 'anim', category = 'Sozial & Alltag', dict = 'amb@world_human_binoculars@male@base', clip = 'base', flag = 49 },
@@ -135,7 +135,7 @@ Config.AnimationMenu = {
         { label = 'Hämmern (Szenario)', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_HAMMERING' },
         { label = 'Schweißen (Szenario)', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_WELDING' },
         { label = 'Fegen (Szenario)', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_JANITOR' },
-        { label = 'Malen', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_STAND_FISHING' },
+        { label = 'Angeln (Szenario)', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_STAND_FISHING' },
         { label = 'Sonnenbaden', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_SUNBATHE_BACK' },
         { label = 'Muskeltraining', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_MUSCLE_FLEX' },
         { label = 'Yoga (Szenario)', type = 'scenario', category = 'Szenarien', scenario = 'WORLD_HUMAN_YOGA' },
