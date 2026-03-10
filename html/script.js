@@ -8,6 +8,7 @@
     var entries = [];
     var currentIndex = 0;
     var menuVisible = false;
+    var resourceName = 'AnimationMTJ2024';
 
     function escapeHtml(text) {
         var div = document.createElement('div');
@@ -78,6 +79,9 @@
         if (currentIndex < 0 || currentIndex >= entries.length) {
             currentIndex = 0;
         }
+        if (data.resourceName) {
+            resourceName = data.resourceName;
+        }
         renderEntries();
         menuEl.style.display = 'flex';
         menuVisible = true;
@@ -89,7 +93,7 @@
     }
 
     function sendCallback(name, data) {
-        fetch('https://AnimationMTJ2024/' + name, {
+        fetch('https://' + resourceName + '/' + name, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data || {})

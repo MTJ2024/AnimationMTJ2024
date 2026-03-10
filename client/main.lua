@@ -31,7 +31,8 @@ local function openAnimationMenu()
     SendNUIMessage({
         action = 'open',
         entries = animationMenuEntries,
-        currentIndex = animationMenuIndex
+        currentIndex = animationMenuIndex,
+        resourceName = GetCurrentResourceName()
     })
     SetNuiFocus(true, true)
 end
