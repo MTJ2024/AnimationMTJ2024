@@ -22,16 +22,28 @@ local function stopCurrentAction()
     isSitting = false
 end
 
-local function showAnimationMenuPrompt()
-    if #animationMenuEntries == 0 then
-        showPrompt(animationMenuConfig.noEntriesPrompt or 'Animationsmenü: keine Einträge konfiguriert')
+local function openAnimationMenu()
+    if animationMenuOpen then
         return
     end
+    animationMenuOpen = true
+    animationMenuIndex = 1
+    SendNUIMessage({
+        action = 'open',
+        entries = animationMenuEntries,
+        currentIndex = animationMenuIndex,
+        resourceName = GetCurrentResourceName()
+    })
+    SetNuiFocus(true, true)
+end
 
-    local currentEntry = animationMenuEntries[animationMenuIndex]
-    local basePrompt = animationMenuConfig.prompt or 'Animationsmenü: ↑/↓ auswählen, Enter abspielen, Backspace schließen, X stoppen'
-    local label = currentEntry.label or 'Unbenannt'
-    showPrompt(('%s~n~Aktuell: ~y~%s~s~ (%d/%d)'):format(basePrompt, label, animationMenuIndex, #animationMenuEntries))
+local function closeAnimationMenu()
+    if not animationMenuOpen then
+        return
+    end
+    animationMenuOpen = false
+    SendNUIMessage({ action = 'close' })
+    SetNuiFocus(false, false)
 end
 
 local function playAnimationEntry(entry)
@@ -72,8 +84,31 @@ local function toggleAnimationMenu()
         return
     end
 
-    animationMenuOpen = not animationMenuOpen
+    if animationMenuOpen then
+        closeAnimationMenu()
+    else
+        openAnimationMenu()
+    end
 end
+
+RegisterNUICallback('playEntry', function(data, cb)
+    local index = tonumber(data.index)
+    if index and index >= 1 and index <= #animationMenuEntries then
+        animationMenuIndex = index
+        playAnimationEntry(animationMenuEntries[index])
+    end
+    cb('ok')
+end)
+
+RegisterNUICallback('stopAction', function(_, cb)
+    stopCurrentAction()
+    cb('ok')
+end)
+
+RegisterNUICallback('closeMenu', function(_, cb)
+    closeAnimationMenu()
+    cb('ok')
+end)
 
 local function getModelConfig(entity)
     local entityModel = GetEntityModel(entity)
@@ -328,39 +363,20 @@ CreateThread(function()
         local ped = PlayerPedId()
 
         if not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, false) then
-            if animationMenuOpen then
+            if isSitting then
                 waitTime = 0
-                showAnimationMenuPrompt()
-                local hasAnimationEntries = #animationMenuEntries > 0
-
-                if hasAnimationEntries and IsControlJustReleased(0, animationMenuConfig.upControl or 172) then
-                    animationMenuIndex = animationMenuIndex - 1
-                    if animationMenuIndex < 1 then
-                        animationMenuIndex = #animationMenuEntries
-                    end
-                elseif hasAnimationEntries and IsControlJustReleased(0, animationMenuConfig.downControl or 173) then
-                    animationMenuIndex = animationMenuIndex + 1
-                    if animationMenuIndex > #animationMenuEntries then
-                        animationMenuIndex = 1
-                    end
-                elseif hasAnimationEntries and IsControlJustReleased(0, animationMenuConfig.selectControl or 191) then
-                    playAnimationEntry(animationMenuEntries[animationMenuIndex])
-                elseif IsControlJustReleased(0, animationMenuConfig.stopControl or 73) then
-                    stopCurrentAction()
-                elseif IsControlJustReleased(0, animationMenuConfig.closeControl or 194) then
-                    animationMenuOpen = false
-                end
-            else
-                if isSitting then
-                    waitTime = 0
-                    showPrompt(Config.PromptStand)
-                    if IsControlJustReleased(0, Config.StandControl) then
-                        standUp()
-                    end
+                showPrompt(Config.PromptStand)
+                if IsControlJustReleased(0, Config.StandControl) then
+                    standUp()
                 end
             end
-        elseif isSitting then
-            standUp()
+        else
+            if animationMenuOpen then
+                closeAnimationMenu()
+            end
+            if isSitting then
+                standUp()
+            end
         end
 
         Wait(waitTime)
